@@ -48,8 +48,7 @@ namespace DBG48
             {
                 if (DiscardPile.Count > 0)
                     this.ShuffleDeck();
-                else
-                    return;
+                return;
             }
 
             Hand.Add(this.Deck.Dequeue());

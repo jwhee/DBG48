@@ -30,7 +30,7 @@ namespace DBG48
         public const float CARD_SCALE = 0.20f;
         public const int MAX_HAND_DISPLAY_SIZE = 9;
         private const int START_HAND_SIZE = 5;
-        public const int START_DECK_SIZE = 10;
+        public const int START_DECK_SIZE = 9;
         public const int CARD_WIDTH = 320;
         public const int CARD_HEIGHT = 450;
 
@@ -129,11 +129,15 @@ namespace DBG48
             cardImageList = new List<Texture2D>();
             if (Directory.Exists(@"Content\Img\Card\"))
             {
-                string[] filePaths = Directory.GetFiles(@"Content\Img\Card\", "*.jpg");
-                foreach (string path in filePaths)
+                string[] directories = Directory.GetDirectories(@"Content\Img\Card\");
+                foreach (string directory in directories)
                 {
-                    FileStream stream = File.OpenRead(path);
-                    cardImageList.Add(Texture2D.FromStream(GraphicsDevice, stream));
+                    string[] filePaths = Directory.GetFiles(directory, "*.jpg");
+                    foreach (string path in filePaths)
+                    {
+                        FileStream stream = File.OpenRead(path);
+                        cardImageList.Add(Texture2D.FromStream(GraphicsDevice, stream));
+                    }
                 }
             }
             this.mainPlayer.InitializeDeck(cardImageList);

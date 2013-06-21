@@ -22,24 +22,9 @@ namespace DBG48
             this.DiscardPile = new List<Card>();
         }
 
-        public void InitializeDeck(List<Texture2D> cardImageList)
+        public void InitializeDeck(Queue<Card> deck)
         {
-            for (int i = 0; i < GameInstance.START_DECK_SIZE; i++)
-            {
-                Texture2D cardTexture = GameInstance.cardbackTexture;
-                int count = cardImageList.Count;
-                if (cardImageList.Count > 0)
-                {
-                    int index = GameInstance.randGen.Next(count);
-                    cardTexture = cardImageList[index];
-                }
-
-                this.Deck.Enqueue(
-                    new Card(
-                      cardTexture, 
-                      "", 
-                      ""));
-            }
+            this.Deck = deck;
         }
 
         public void DrawCard()

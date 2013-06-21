@@ -43,7 +43,6 @@ namespace DBG48
         public static Texture2D cardTexture;
         public static Texture2D backgroundTexture;
         public static SpriteFont font;
-        public static List<Texture2D> cardImageList;
 
         public static Random randGen;
         float elapsedTime = 0.0f;
@@ -114,6 +113,7 @@ namespace DBG48
             {
                 FileStream stream = File.OpenRead(filePath);
                 backgroundTexture = Texture2D.FromStream(GraphicsDevice, stream);
+                stream.Close();
             }
 
             // Try load card back
@@ -123,24 +123,41 @@ namespace DBG48
             {
                 FileStream stream = File.OpenRead(filePath);
                 cardbackTexture = Texture2D.FromStream(GraphicsDevice, stream);
+                stream.Close();
             }
 
             // Dynamic load pictures
-            cardImageList = new List<Texture2D>();
+            List<CardInfoContainer> cardInfoList = new List<CardInfoContainer>();
             if (Directory.Exists(@"Content\Img\Card\"))
             {
                 string[] directories = Directory.GetDirectories(@"Content\Img\Card\");
                 foreach (string directory in directories)
                 {
+                    string name = Path.GetFileName(directory);
                     string[] filePaths = Directory.GetFiles(directory, "*.jpg");
                     foreach (string path in filePaths)
                     {
-                        FileStream stream = File.OpenRead(path);
-                        cardImageList.Add(Texture2D.FromStream(GraphicsDevice, stream));
+                        cardInfoList.Add(new CardInfoContainer(path, name, ""));
                     }
                 }
             }
-            this.mainPlayer.InitializeDeck(cardImageList);
+
+            // Initialize deck
+            Queue<Card> deck = new Queue<Card>();
+            for (int i = 0; i < START_DECK_SIZE; i++)
+            {
+                int count = cardInfoList.Count;
+                if (cardInfoList.Count > 0)
+                {
+                    int index = randGen.Next(count);
+                    CardInfoContainer cardInfo = cardInfoList[index];
+                    FileStream stream = File.OpenRead(cardInfo.Filepath);
+                    Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
+                    stream.Close();
+                    deck.Enqueue(new Card(cardTexture, cardInfo.Name, cardInfo.Text));
+                }
+            }
+            this.mainPlayer.InitializeDeck(deck);
 
             // initialize starting hand
             handZone = new HandZone(this, new Vector2(100, 350));

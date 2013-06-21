@@ -1,14 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-
 
 namespace DBG48
 {
@@ -168,12 +161,12 @@ namespace DBG48
                         new Color(100, 100, 100, 0), 0.0f, origin, SpriteEffects.None, 0.0f);
 
                     // Draw text
-                    string text = card.Name;
+                    string text = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(card.Name));
                     origin.X = 0; //Game1.font.MeasureString(text).X/2;
                     origin.Y = 0; //Game1.font.MeasureString(text).Y/2;
                     spriteBatch.DrawString(GameInstance.font, text, new Vector2(420, 50), Color.Black, 0.0f, origin, 1.0f, SpriteEffects.None, 0.0f);
 
-                    text = card.Text;
+                    text = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(card.Text));
                     spriteBatch.DrawString(GameInstance.font, text, new Vector2(420, 100), Color.Black, 0.0f, origin, 1.0f, SpriteEffects.None, 0.0f);
                     break;
             }

@@ -73,7 +73,7 @@ namespace DBG48
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 500;
 
-            controller = new Controller(this);
+            controller = new Controller();
             randGen = new Random();
             mainPlayer = new Player(this);
         }

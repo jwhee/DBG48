@@ -52,7 +52,6 @@ namespace DBG48
             {
                 if (game.controller.isRightMouseButtonClicked())
                 {
-                    SoundEngine.Instance.PlaySoundEffect("cardPlace1");
                     // Create overlay
                     game.currentGameState = GameState.OVERLAY;
                     Rectangle originRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.2f);

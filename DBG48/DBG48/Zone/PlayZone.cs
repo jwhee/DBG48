@@ -22,7 +22,6 @@ namespace DBG48
         // For callback
         public void IncrementDisplaySize()
         {
-            SoundEngine.Instance.PlaySoundEffect("cardSlide3");
             this.cardDisplaySize++;
         }
     }

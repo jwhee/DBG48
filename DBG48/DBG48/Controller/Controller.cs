@@ -3,17 +3,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace DBG48
 {
-    /// <summary>
-    /// This is a game component that implements IUpdateable.
-    /// </summary>
-    public class Controller : Microsoft.Xna.Framework.GameComponent
+    public class Controller
     {
         MouseState ms;
         private bool isLeftMouseClicked;
         private bool isRightMouseClicked;
 
-        public Controller(Game game)
-            : base(game)
+        public Controller()
         {
         }
 

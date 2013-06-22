@@ -4,10 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DBG48
 {
     public delegate void Callback();
+
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class SpriteAnimation : Microsoft.Xna.Framework.GameComponent
+    public class SpriteAnimation
     {
         private Texture2D texture;
         private int totalFrame;
@@ -21,7 +22,10 @@ namespace DBG48
         private bool rotateClockwise;
 
         private Color color;
-        private Callback animationFinishedAction;
+
+        // Call when finished
+        private Callback performAnimationFinishedAction;
+        private string animationFinishedSFXKey;
 
         public SpriteAnimation(
             Game game,
@@ -33,9 +37,9 @@ namespace DBG48
             float goalRotation = 0.0f,
             bool rotateClockwise = true,
             Color? color = null,
-            Callback animationFinishedAction = null
+            Callback animationFinishedAction = null,
+            string animationFinishedSFXKey = null
             )
-            : base(game)
         {
             this.texture = texture;
             this.totalFrame = totalFrame;
@@ -46,12 +50,15 @@ namespace DBG48
             this.goalRotation = goalRotation;
             this.rotateClockwise = rotateClockwise;
 
-            this.animationFinishedAction = animationFinishedAction;
-
             if (color == null)
                 this.color = Color.White;
             else
                 this.color = color.Value;
+
+            this.performAnimationFinishedAction = animationFinishedAction;
+
+            this.animationFinishedSFXKey = animationFinishedSFXKey;
+
             this.currentFrame = 0;
         }
 
@@ -63,9 +70,14 @@ namespace DBG48
         {
             if (!this.Finished())
                 currentFrame++;
-            
-            if (animationFinishedAction != null && this.Finished())
-                animationFinishedAction();
+
+            if (this.Finished())
+            {
+                if(performAnimationFinishedAction != null)
+                    performAnimationFinishedAction();
+                if(!string.IsNullOrWhiteSpace(this.animationFinishedSFXKey))
+                    SoundEngine.Instance.PlaySoundEffect(this.animationFinishedSFXKey);
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)

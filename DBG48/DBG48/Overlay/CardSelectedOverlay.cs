@@ -39,7 +39,7 @@ namespace DBG48
         {
             this.game = game;
             this.card = card;
-            this.flyInAnimation = new SpriteAnimation(game, card.Texture, originRectangle, goalRectangle, 7, originRotation, goalRotation, false);
+            this.flyInAnimation = new SpriteAnimation(game, card.Texture, originRectangle, goalRectangle, 10, originRotation, goalRotation, false);
             this.flyOutAnimation = new SpriteAnimation(game, card.Texture, goalRectangle, originRectangle, 5, goalRotation, originRotation, true);
             this.cardRectangle = goalRectangle;
             this.state = OverlayState.FLY_IN;

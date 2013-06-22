@@ -57,7 +57,8 @@ namespace DBG48
                                                GameInstance.CARD_ROTATION,
                                                true,
                                                Color.White,
-                                               this.game.playZone.IncrementDisplaySize);
+                                               this.game.playZone.IncrementDisplaySize,
+                                               "cardSlide3");
                     this.game.animationList.Add(anim);
 
                     // Play Card

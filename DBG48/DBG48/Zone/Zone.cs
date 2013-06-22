@@ -90,7 +90,7 @@ namespace DBG48
             //spriteBatch.Draw(texture, destinationRectangle, new Color(0, 255, 0, 50));
 
             // Draw hand
-            for (int i = 0; i < cardDisplaySize; i++)
+            for (int i = 0; i < this.cardDisplaySize; i++)
             {
                 if (mouse_hover_index != i && i < this.cardList.Count)
                 {
@@ -111,13 +111,15 @@ namespace DBG48
             // Draw hover
             if (game.currentGameState == GameState.PLAYABLE)
             {
-                if (mouse_hover_index != -1 && mouse_hover_index < this.cardList.Count)
+                if (mouse_hover_index != -1
+                    && mouse_hover_index < this.cardDisplaySize
+                    && mouse_hover_index < this.cardList.Count)
                 {
                     // Draw highlight
                     texture = GameInstance.squareTexture;
                     destinationRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.3f);
                     cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
-                    spriteBatch.Draw(texture, destinationRectangle, null, Color.HotPink, GameInstance.CARD_ROTATION, cardOrigin, SpriteEffects.None, 0.0f);
+                    spriteBatch.Draw(texture, destinationRectangle, null, this.getHoverFrameColor(), GameInstance.CARD_ROTATION, cardOrigin, SpriteEffects.None, 0.0f);
 
                     // Draw hovered card
                     texture = this.cardList[mouse_hover_index].Texture;
@@ -137,6 +139,11 @@ namespace DBG48
         public void resetMouseHoverIndex()
         {
             this.mouse_hover_index = -1;
+        }
+
+        protected virtual Color getHoverFrameColor()
+        {
+            return Color.Black;
         }
     }
 }

@@ -148,15 +148,18 @@ namespace DBG48
             Queue<Card> deck = new Queue<Card>();
             for (int i = 0; i < START_DECK_SIZE; i++)
             {
-                int count = cardInfoList.Count;
                 if (cardInfoList.Count > 0)
                 {
-                    int index = randGen.Next(count);
+                    int index = randGen.Next(cardInfoList.Count);
                     CardInfoContainer cardInfo = cardInfoList[index];
                     FileStream stream = File.OpenRead(cardInfo.Filepath);
                     Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
                     stream.Close();
                     deck.Enqueue(new Card(cardTexture, cardInfo.Name, cardInfo.Text));
+                }
+                else
+                {
+                    deck.Enqueue(new Card(squareTexture, "Empty Card", ""));
                 }
             }
             this.mainPlayer.InitializeDeck(deck);

@@ -208,6 +208,11 @@ namespace DBG48
                 // Update mouse
                 controller.Update();
 
+                foreach (SpriteAnimation animation in animationList)
+                {
+                    animation.Update();
+                }
+
                 // Check GameState
                 if (currentGameState == GameState.OVERLAY)
                 {
@@ -219,11 +224,6 @@ namespace DBG48
                     // Update CardZones
                     handZone.Update();
                     playZone.Update();
-
-                    foreach (SpriteAnimation animation in animationList)
-                    {
-                        animation.Update();
-                    }
 
                     // Check if we are drawing card from a deck
                     if(controller.isMouseInRegion(getCardDestinationRectangle(DECK_POSITION, 1.0f)))

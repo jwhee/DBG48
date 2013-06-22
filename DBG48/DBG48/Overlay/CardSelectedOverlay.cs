@@ -29,12 +29,18 @@ namespace DBG48
         ButtonUI playButton;
         //ButtonUI resourceButton;
 
-        public CardSelectedOverlay(GameInstance game, Card card, Rectangle originRectangle, Rectangle goalRectangle)
+        public CardSelectedOverlay(
+            GameInstance game,
+            Card card,
+            Rectangle originRectangle,
+            Rectangle goalRectangle, 
+            float originRotation = 0.0f, 
+            float goalRotation = 0.0f)
         {
             this.game = game;
             this.card = card;
-            this.flyInAnimation = new SpriteAnimation(game, card.Texture, originRectangle, goalRectangle, 10);
-            this.flyOutAnimation = new SpriteAnimation(game, card.Texture, goalRectangle, originRectangle, 5);
+            this.flyInAnimation = new SpriteAnimation(game, card.Texture, originRectangle, goalRectangle, 10, originRotation, goalRotation, false);
+            this.flyOutAnimation = new SpriteAnimation(game, card.Texture, goalRectangle, originRectangle, 5, goalRotation, originRotation, true);
             this.cardRectangle = goalRectangle;
             this.state = OverlayState.FLY_IN;
             this.currentFrame = 0;

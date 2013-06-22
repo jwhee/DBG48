@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DBG48
 {
+    public delegate void Callback();
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
@@ -28,6 +29,9 @@ namespace DBG48
         private float goalRotation;
         private bool rotateClockwise;
 
+        private Color color;
+        private Callback animationFinishedAction;
+
         public SpriteAnimation(
             Game game,
             Texture2D texture,
@@ -36,7 +40,9 @@ namespace DBG48
             int totalFrame,
             float originRotation = 0.0f,
             float goalRotation = 0.0f,
-            bool rotateClockwise = true
+            bool rotateClockwise = true,
+            Color? color = null,
+            Callback animationFinishedAction = null
             )
             : base(game)
         {
@@ -49,6 +55,12 @@ namespace DBG48
             this.goalRotation = goalRotation;
             this.rotateClockwise = rotateClockwise;
 
+            this.animationFinishedAction = animationFinishedAction;
+
+            if (color == null)
+                this.color = Color.White;
+            else
+                this.color = color.Value;
             this.currentFrame = 0;
         }
 
@@ -58,15 +70,18 @@ namespace DBG48
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Update()
         {
-            if(!Finished())
+            if (!this.Finished())
                 currentFrame++;
+            
+            if (animationFinishedAction != null && this.Finished())
+                animationFinishedAction();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             Rectangle destinationRectangle = getAnimatedCardDestinationRectangle();
             Vector2 cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
-            spriteBatch.Draw(texture, destinationRectangle, null, Color.White, getRotation(), cardOrigin, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(texture, destinationRectangle, null, this.color, getRotation(), cardOrigin, SpriteEffects.None, 0.0f);
         }
 
         public bool Finished()

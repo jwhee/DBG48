@@ -33,6 +33,7 @@ namespace DBG48
         public const int START_DECK_SIZE = 15;
         public const int CARD_WIDTH = 320;
         public const int CARD_HEIGHT = 450;
+        public const float CARD_ROTATION = 0.1f;
 
         // Texture
         public static Texture2D squareTexture;
@@ -57,6 +58,7 @@ namespace DBG48
         public PlayZone playZone;
 
         public Player mainPlayer;
+        public List<SpriteAnimation> animationList;
 
         public GameInstance()
         {
@@ -162,8 +164,10 @@ namespace DBG48
 
             // initialize starting hand
             handZone = new HandZone(this, new Vector2(100, 350));
-            playZone = new PlayZone(this, new Vector2(100, 100));
+            playZone = new PlayZone(this, new Vector2(100, 220));
 
+            // initialize animation list
+            animationList = new List<SpriteAnimation>();
             // Draw starting hand?
             for (int i = 0; i < START_HAND_SIZE; i++)
             {
@@ -212,9 +216,14 @@ namespace DBG48
                 }
                 else
                 {
-                    // Update handzone
+                    // Update CardZones
                     handZone.Update();
                     playZone.Update();
+
+                    foreach (SpriteAnimation animation in animationList)
+                    {
+                        animation.Update();
+                    }
 
                     // Check if we are drawing card from a deck
                     if(controller.isMouseInRegion(getCardDestinationRectangle(DECK_POSITION, 1.0f)))
@@ -294,6 +303,18 @@ namespace DBG48
                     SpriteEffects.None, 
                     0.0f);
             }
+
+            // Draw animation
+            List<SpriteAnimation> newAnimationList = new List<SpriteAnimation>();
+            foreach (SpriteAnimation animation in animationList)
+            {
+                animation.Draw(spriteBatch);
+                if (!animation.Finished())
+                {
+                    newAnimationList.Add(animation);
+                }
+            }
+            animationList = newAnimationList;
 
             // Draw card selected overlay
             if (currentGameState == GameState.OVERLAY)

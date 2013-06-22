@@ -15,26 +15,28 @@ namespace DBG48
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class HandZone : Zone
+    public class PlayZone : Zone
     {
         private const int ZONE_WIDTH = 515;
         private const int ZONE_HEIGHT = 120;
 
         private int mouse_hover_index = -1;
-        private Player mainPlayer;
+        //private Player mainPlayer;
+        List<Card> playedCards;
 
-        public HandZone(GameInstance game, Vector2 position)
+        public PlayZone(GameInstance game, Vector2 position)
             : base(game, position)
         {
-            this.mainPlayer = this.game.mainPlayer;
+            //this.mainPlayer = this.game.mainPlayer;
+            playedCards = this.game.mainPlayer.DiscardPile;
         }
 
         public void Update()
         {
             mouse_hover_index = -1;
-            for (int i = 0; i < GameInstance.MAX_HAND_DISPLAY_SIZE; i++)
+            for (int i = 0; i < this.playedCards.Count; i++)
             {
-                if (i < this.mainPlayer.Hand.Count)
+                if (i < this.playedCards.Count)
                 {
                     if (game.controller.isMouseInRegion(getCardDestinationRectangle(getHandCardPosition(i), 1.0f)))
                     {
@@ -57,15 +59,9 @@ namespace DBG48
                         5.0f);
                     game.cardSelectedOverlay = new CardSelectedOverlay(
                         this.game,
-                        this.mainPlayer.Hand[mouse_hover_index], 
+                        this.playedCards[mouse_hover_index], 
                         originRectangle, 
                         goalRectangle);
-                }
-
-                // Left mouse click: Play card
-                if (game.controller.isLeftMouseButtonClicked())
-                {
-                    this.mainPlayer.PlayCard(this.mainPlayer.Hand[mouse_hover_index]);
                 }
             }
         }
@@ -82,9 +78,11 @@ namespace DBG48
             //spriteBatch.Draw(texture, destinationRectangle, new Color(0, 255, 0, 50));
 
             // Draw hand
-            for (int i = 0; i < GameInstance.MAX_HAND_DISPLAY_SIZE; i++)
+            int displaySize = this.playedCards.Count;
+            //displaySize = GameInstance.MAX_HAND_DISPLAY_SIZE;
+            for (int i = 0; i < displaySize; i++)
             {
-                if (mouse_hover_index != i && i < this.mainPlayer.Hand.Count)
+                if (mouse_hover_index != i && i < this.playedCards.Count)
                 {
                     // Draw frame
                     texture = GameInstance.squareTexture;
@@ -93,7 +91,7 @@ namespace DBG48
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.Black, 0.1f, cardOrigin, SpriteEffects.None, 0.0f);
 
                     // Draw other cards
-                    texture = this.mainPlayer.Hand[i].Texture;
+                    texture = this.playedCards[i].Texture;
                     destinationRectangle = getCardDestinationRectangle(getHandCardPosition(i), 1.0f);
                     cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.White, 0.1f, cardOrigin, SpriteEffects.None, 0.0f);
@@ -103,7 +101,7 @@ namespace DBG48
             // Draw hover
             if (game.currentGameState == GameState.PLAYABLE)
             {
-                if (mouse_hover_index != -1 && mouse_hover_index < this.mainPlayer.Hand.Count)
+                if (mouse_hover_index != -1 && mouse_hover_index < this.playedCards.Count)
                 {
                     // Draw highlight
                     texture = GameInstance.squareTexture;
@@ -112,27 +110,11 @@ namespace DBG48
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.HotPink, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
 
                     // Draw hovered card
-                    texture = this.mainPlayer.Hand[mouse_hover_index].Texture;
+                    texture = this.playedCards[mouse_hover_index].Texture;
                     destinationRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.2f);
                     cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.White, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
                 }
-            }
-
-            // TEST: arrow buttons
-            if (this.mainPlayer.Hand.Count > GameInstance.MAX_HAND_DISPLAY_SIZE)
-            {
-                texture = GameInstance.uiTexture;
-                Vector2 tempPosition = getHandCardPosition(0);
-                destinationRectangle = new Rectangle((int)tempPosition.X - 45, (int)tempPosition.Y, 24, 24);
-                cardOrigin = new Vector2(8, 8);
-                spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
-
-                texture = GameInstance.uiTexture;
-                tempPosition = getHandCardPosition(0);
-                destinationRectangle = new Rectangle((int)tempPosition.X + 445, (int)tempPosition.Y, 24, 24);
-                cardOrigin = new Vector2(8, 8);
-                spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
             }
         }
 

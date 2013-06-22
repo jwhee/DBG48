@@ -50,8 +50,11 @@ namespace DBG48
                 this.DiscardPile[k] = this.DiscardPile[n];
                 this.DiscardPile[n] = temp;
             }
-            this.Deck = new Queue<Card>(this.DiscardPile);
-            this.DiscardPile = new List<Card>();
+            foreach (Card card in this.DiscardPile)
+            {
+                this.Deck.Enqueue(card);
+            }
+            this.DiscardPile.Clear();
         }
 
         public void PlayCard(Card card)

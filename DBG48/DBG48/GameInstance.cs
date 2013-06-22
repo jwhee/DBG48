@@ -30,7 +30,7 @@ namespace DBG48
         public const float CARD_SCALE = 0.20f;
         public const int MAX_HAND_DISPLAY_SIZE = 9;
         private const int START_HAND_SIZE = 5;
-        public const int START_DECK_SIZE = 9;
+        public const int START_DECK_SIZE = 15;
         public const int CARD_WIDTH = 320;
         public const int CARD_HEIGHT = 450;
 
@@ -54,6 +54,7 @@ namespace DBG48
         public HandZone handZone;
         //public Queue<Card> deck;
         //public List<Card> discard;
+        public PlayZone playZone;
 
         public Player mainPlayer;
 
@@ -161,6 +162,7 @@ namespace DBG48
 
             // initialize starting hand
             handZone = new HandZone(this, new Vector2(100, 350));
+            playZone = new PlayZone(this, new Vector2(100, 100));
 
             // Draw starting hand?
             for (int i = 0; i < START_HAND_SIZE; i++)
@@ -212,6 +214,7 @@ namespace DBG48
                 {
                     // Update handzone
                     handZone.Update();
+                    playZone.Update();
 
                     // Check if we are drawing card from a deck
                     if(controller.isMouseInRegion(getCardDestinationRectangle(DECK_POSITION, 1.0f)))
@@ -261,6 +264,7 @@ namespace DBG48
 
             // Draw hand
             handZone.Draw(spriteBatch);
+            playZone.Draw(spriteBatch);
 
             // Draw full deck
             int drawDeckSize = 10;

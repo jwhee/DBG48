@@ -24,7 +24,20 @@ namespace DBG48
         private Rectangle originRectangle;
         private Rectangle goalRectangle;
 
-        public SpriteAnimation(Game game, Texture2D texture, Rectangle originRectangle, Rectangle goalRectangle, int totalFrame)
+        private float originRotation;
+        private float goalRotation;
+        private bool rotateClockwise;
+
+        public SpriteAnimation(
+            Game game,
+            Texture2D texture,
+            Rectangle originRectangle,
+            Rectangle goalRectangle,
+            int totalFrame,
+            float originRotation = 0.0f,
+            float goalRotation = 0.0f,
+            bool rotateClockwise = true
+            )
             : base(game)
         {
             this.texture = texture;
@@ -32,18 +45,11 @@ namespace DBG48
             this.originRectangle = originRectangle;
             this.goalRectangle = goalRectangle;
 
+            this.originRotation = originRotation;
+            this.goalRotation = goalRotation;
+            this.rotateClockwise = rotateClockwise;
+
             this.currentFrame = 0;
-        }
-
-        /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
-        /// </summary>
-        public override void Initialize()
-        {
-            // NOT USED
-
-            base.Initialize();
         }
 
         /// <summary>
@@ -58,9 +64,9 @@ namespace DBG48
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle destinationRectangle = getAnimatedCardDestinationRectangle(originRectangle, goalRectangle);
+            Rectangle destinationRectangle = getAnimatedCardDestinationRectangle();
             Vector2 cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
-            spriteBatch.Draw(texture, destinationRectangle, null, Color.White, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(texture, destinationRectangle, null, Color.White, getRotation(), cardOrigin, SpriteEffects.None, 0.0f);
         }
 
         public bool Finished()
@@ -68,8 +74,7 @@ namespace DBG48
             return (currentFrame < totalFrame) ? false : true;
         }
 
-        private Rectangle getAnimatedCardDestinationRectangle(
-            Rectangle originRectangle, Rectangle goalRectangle)
+        private Rectangle getAnimatedCardDestinationRectangle()
         {
             float deltaX = goalRectangle.X - originRectangle.X;
             float deltaY = goalRectangle.Y - originRectangle.Y;
@@ -80,6 +85,17 @@ namespace DBG48
                                  (int)(originRectangle.Y + (deltaY * currentFrame) / totalFrame),
                                  (int)(originRectangle.Width + (deltaWidth * currentFrame) / totalFrame),
                                  (int)(originRectangle.Height + (deltaHeight * currentFrame) / totalFrame));
+        }
+
+        private float getRotation()
+        {
+            float result = originRotation;
+
+            if (rotateClockwise)
+                result += (goalRotation - originRotation) * (float)currentFrame / (float)totalFrame;
+            else
+                result -= (originRotation - goalRotation) * (float)currentFrame / (float)totalFrame;
+            return result;
         }
     }
 }

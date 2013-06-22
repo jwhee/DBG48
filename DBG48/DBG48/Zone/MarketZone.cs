@@ -14,15 +14,12 @@ namespace DBG48
             // Specific MarketZone Constant
             this.cardRotation = 0.0f;
             this.cardDistance = 70;
+            this.zoneWidth = 340;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             this.cardDisplaySize = this.CardList.Count;
-
-            Texture2D texture = GameInstance.squareTexture;
-            Rectangle destinationRectangle = new Rectangle((int)position.X, (int)position.Y, zoneWidth, zoneHeight);
-            spriteBatch.Draw(texture, destinationRectangle, new Color(50, 50, 0, 50));
 
             base.Draw(spriteBatch);
         }

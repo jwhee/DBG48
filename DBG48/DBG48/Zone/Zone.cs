@@ -49,7 +49,7 @@ namespace DBG48
             mouse_hover_index = -1;
             for (int i = 0; i < this.CardList.Count; i++)
             {
-                if (i < this.CardList.Count)
+                if (i < this.cardDisplaySize)
                 {
                     if (game.controller.isMouseInRegion(getCardDestinationRectangle(getHandCardPosition(i), 1.0f)))
                     {

@@ -141,7 +141,7 @@ namespace DBG48
                     spriteBatch.Draw(texture, viewPort, null, new Color(15, 0, 0, 150), 0.0f, origin, SpriteEffects.None, 0.0f);
                     
                     // TEST: button...
-                    playButton.Draw(spriteBatch);
+                    //playButton.Draw(spriteBatch);
 
                     // Card
                     texture = card.Texture;
@@ -152,9 +152,9 @@ namespace DBG48
                     texture = GameInstance.squareTexture;
                     origin = new Vector2(texture.Width / 2, texture.Height / 2);
                     spriteBatch.Draw(texture, new Rectangle(580, 200, 380, 350), null, 
-                        new Color(50, 50, 50, 0), 0.0f, origin, SpriteEffects.None, 0.0f);
-                    spriteBatch.Draw(texture, new Rectangle(580, 200, 370, 340), null, 
-                        new Color(100, 100, 100, 0), 0.0f, origin, SpriteEffects.None, 0.0f);
+                        Color.Pink, 0.0f, origin, SpriteEffects.None, 0.0f);
+                    spriteBatch.Draw(texture, new Rectangle(580, 200, 370, 340), null,
+                        Color.LightYellow, 0.0f, origin, SpriteEffects.None, 0.0f);
 
                     // Draw text
                     string text = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(card.Name));

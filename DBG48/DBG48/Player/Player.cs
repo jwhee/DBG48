@@ -10,6 +10,8 @@ namespace DBG48
         public List<Card> Hand { get; private set; }
         public Queue<Card> Deck { get; private set; }
         public List<Card> DiscardPile { get; private set; }
+        public int Income { get; private set; }
+
         private GameInstance game;
 
         public Player(GameInstance game)

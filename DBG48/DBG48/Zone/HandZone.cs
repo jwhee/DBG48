@@ -10,7 +10,7 @@ namespace DBG48
         public HandZone(GameInstance game, Vector2 position)
             : base(game, position)
         {
-            this.cardList = this.game.mainPlayer.Hand;
+            this.CardList = this.game.mainPlayer.Hand;
             this.mainPlayer = this.game.mainPlayer;
             this.cardDisplaySize = GameInstance.MAX_HAND_DISPLAY_SIZE;
         }
@@ -32,7 +32,7 @@ namespace DBG48
                     originRectangle = this.game.handZone.getCardDestinationRectangle(
                                         this.game.handZone.getHandCardPosition(mouse_hover_index), 1.07f);
                     goalRectangle = this.game.playZone.getCardDestinationRectangle(
-                                        this.game.playZone.getHandCardPosition(this.game.playZone.cardList.Count), 1.07f);
+                                        this.game.playZone.getHandCardPosition(this.game.playZone.CardList.Count), 1.07f);
                     anim = new SpriteAnimation(this.game,
                                                GameInstance.squareTexture,
                                                originRectangle,
@@ -47,7 +47,7 @@ namespace DBG48
                     originRectangle = this.game.handZone.getCardDestinationRectangle(
                                         this.game.handZone.getHandCardPosition(mouse_hover_index), 1.0f);
                     goalRectangle = this.game.playZone.getCardDestinationRectangle(
-                                        this.game.playZone.getHandCardPosition(this.game.playZone.cardList.Count), 1.0f);
+                                        this.game.playZone.getHandCardPosition(this.game.playZone.CardList.Count), 1.0f);
                     anim = new SpriteAnimation(this.game,
                                                this.mainPlayer.Hand[mouse_hover_index].Texture,
                                                originRectangle,
@@ -80,7 +80,7 @@ namespace DBG48
             {
                 texture = GameInstance.uiTexture;
                 Vector2 tempPosition = getHandCardPosition(0);
-                destinationRectangle = new Rectangle((int)tempPosition.X - 45, (int)tempPosition.Y, 24, 24);
+                destinationRectangle = new Rectangle((int)tempPosition.X - 50, (int)tempPosition.Y, 24, 24);
                 cardOrigin = new Vector2(8, 8);
                 spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
 

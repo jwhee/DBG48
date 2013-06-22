@@ -27,7 +27,9 @@ namespace DBG48
 
         // constant
         private Vector2 DECK_POSITION = new Vector2(60, 420);
-        private Vector2 HAND_POSITION = new Vector2(150, 400);
+        private Vector2 HANDZONE_POSITION = new Vector2(120, 350);
+        private Vector2 PLAYZONE_POSITION = new Vector2(120, 220);
+        private Vector2 MARKET_POSITION = new Vector2(180, 50);
         private Vector2 DISCARD_POSITION = new Vector2(60, 300);
         public const float CARD_SCALE = 0.20f;
         public const int MAX_HAND_DISPLAY_SIZE = 8;
@@ -57,6 +59,8 @@ namespace DBG48
         public CardSelectedOverlay cardSelectedOverlay;
         public HandZone handZone;
         public PlayZone playZone;
+        public MarketZone marketZone;
+
         public List<Card> playPile;
 
         public Player mainPlayer;
@@ -168,10 +172,29 @@ namespace DBG48
             }
             this.mainPlayer.InitializeDeck(deck);
 
-            // initialize starting hand
-            handZone = new HandZone(this, new Vector2(100, 350));
-            playZone = new PlayZone(this, new Vector2(100, 220));
+            // Initialize market deck
+            marketZone = new MarketZone(this, MARKET_POSITION);
+            for (int i = 0; i < 5; i++)
+            {
+                if (cardInfoList.Count > 0)
+                {
+                    int index = randGen.Next(cardInfoList.Count);
+                    CardInfoContainer cardInfo = cardInfoList[index];
+                    FileStream stream = File.OpenRead(cardInfo.Filepath);
+                    Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
+                    stream.Close();
+                    marketZone.CardList.Add(new Card(cardTexture, cardInfo.Name, cardInfo.Text));
+                }
+                else
+                {
+                    marketZone.CardList.Add(new Card(squareTexture, "Empty Card", ""));
+                }
+            }
 
+            // initialize starting hand
+            handZone = new HandZone(this, HANDZONE_POSITION);
+            playZone = new PlayZone(this, PLAYZONE_POSITION);
+            
             // initialize animation list
             animationList = new List<SpriteAnimation>();
 
@@ -258,6 +281,7 @@ namespace DBG48
                     // Update CardZones
                     handZone.Update();
                     playZone.Update();
+                    marketZone.Update();
 
                     // DEBUG: Drawing card from a deck
                     if(controller.isMouseInRegion(getCardDestinationRectangle(DECK_POSITION, 1.0f)))
@@ -314,11 +338,12 @@ namespace DBG48
                 SpriteEffects.None,
                 0.0f);
 
-            // Draw hand
+            // Draw Card zones
             handZone.Draw(spriteBatch);
             playZone.Draw(spriteBatch);
+            marketZone.Draw(spriteBatch);
 
-            // Draw full deck
+            #region Draw Player Deck
             int drawDeckSize = 10;
             for (int i = 0; i < drawDeckSize; i++)
             {
@@ -346,8 +371,9 @@ namespace DBG48
                 1.0f,
                 SpriteEffects.None,
                 0.0f);
+            #endregion
 
-            #region Draw player discard pile
+            #region Draw Player Discard Pile
             texture = GameInstance.squareTexture;
             position = new Vector2(DISCARD_POSITION.X, DISCARD_POSITION.Y);
             destinationRectangle = getCardDestinationRectangle(position, 1.07f);
@@ -418,12 +444,7 @@ namespace DBG48
 
             base.Draw(gameTime);
         }
-
-        private Vector2 getHandCardPosition(int index)
-        {
-            return new Vector2(HAND_POSITION.X + 50 * index, HAND_POSITION.Y);
-        }
-        
+              
         private Rectangle getCardDestinationRectangle(Vector2 position, float scale)
         {
             return new Rectangle((int)(position.X),

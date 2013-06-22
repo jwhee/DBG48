@@ -8,13 +8,13 @@ namespace DBG48
         public PlayZone(GameInstance game, Vector2 position)
             : base(game, position)
         {
-            this.cardList = this.game.playPile;
+            this.CardList = this.game.playPile;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (this.cardDisplaySize > this.cardList.Count)
-                this.cardDisplaySize = this.cardList.Count;
+            if (this.cardDisplaySize > this.CardList.Count)
+                this.cardDisplaySize = this.CardList.Count;
 
             base.Draw(spriteBatch);
         }

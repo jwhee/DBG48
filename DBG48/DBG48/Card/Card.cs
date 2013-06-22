@@ -7,9 +7,9 @@ namespace DBG48
     /// </summary>
     public class Card
     {
-        public Texture2D Texture { get; set; }
-        public string Name { get; set; }
-        public string Text { get; set; }
+        public Texture2D Texture { get; private set; }
+        public string Name { get; private set; }
+        public string Text { get; private set; }
 
         public Card(Texture2D texture, string Name, string Text)
         {

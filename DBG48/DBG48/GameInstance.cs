@@ -28,8 +28,9 @@ namespace DBG48
         // constant
         private Vector2 DECK_POSITION = new Vector2(60, 420);
         private Vector2 HAND_POSITION = new Vector2(150, 400);
+        private Vector2 DISCARD_POSITION = new Vector2(60, 300);
         public const float CARD_SCALE = 0.20f;
-        public const int MAX_HAND_DISPLAY_SIZE = 9;
+        public const int MAX_HAND_DISPLAY_SIZE = 8;
         private const int START_HAND_SIZE = 5;
         public const int START_DECK_SIZE = 15;
         public const int CARD_WIDTH = 320;
@@ -51,11 +52,12 @@ namespace DBG48
 
         public Controller controller;
         public GameState currentGameState = GameState.PREGAME;
-        private int pregameFrameLeft = 100;
+        private int pregameFrameLeft = 20;
 
         public CardSelectedOverlay cardSelectedOverlay;
         public HandZone handZone;
         public PlayZone playZone;
+        public List<Card> playPile;
 
         public Player mainPlayer;
         public List<SpriteAnimation> animationList;
@@ -76,6 +78,8 @@ namespace DBG48
             controller = new Controller();
             randGen = new Random();
             mainPlayer = new Player(this);
+
+            playPile = new List<Card>();
         }
 
         /// <summary>
@@ -230,16 +234,18 @@ namespace DBG48
                 {
                     this.pregameFrameLeft--;
 
-
-                    // Draw starting hand?
-                    if (pregameFrameLeft/20 < START_HAND_SIZE - mainPlayer.Hand.Count)
+                    // Draw starting hand
+                    if (pregameFrameLeft <= 0)
                     {
-                        mainPlayer.DrawCard();
-                    }
-
-                    if (this.pregameFrameLeft <= 0)
-                    {
-                        this.currentGameState = GameState.PLAYABLE;
+                        pregameFrameLeft = 20;
+                        if (this.mainPlayer.Hand.Count < 5)
+                        {
+                            this.mainPlayer.DrawCard();
+                        }
+                        else
+                        {
+                            this.currentGameState = GameState.PLAYABLE;
+                        }
                     }
                 }
                 else if (currentGameState == GameState.OVERLAY)
@@ -253,12 +259,21 @@ namespace DBG48
                     handZone.Update();
                     playZone.Update();
 
-                    // Check if we are drawing card from a deck
+                    // DEBUG: Drawing card from a deck
                     if(controller.isMouseInRegion(getCardDestinationRectangle(DECK_POSITION, 1.0f)))
                     {
                         if(controller.isLeftMouseButtonClicked())
                         {
                             this.mainPlayer.DrawCard();
+                        }
+                    }
+
+                    // Check if we ending turn
+                    if (controller.isMouseInRegion(getCardDestinationRectangle(DISCARD_POSITION, 1.0f)))
+                    {
+                        if (controller.isLeftMouseButtonClicked())
+                        {
+                            this.mainPlayer.EndTurn();
                         }
                     }
                 }
@@ -318,19 +333,67 @@ namespace DBG48
                 destinationRectangle = getCardDestinationRectangle(position, 1.0f);
                 cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
                 spriteBatch.Draw(texture, destinationRectangle, null, Color.White, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
-
-                string text = this.mainPlayer.Deck.Count.ToString();
-                spriteBatch.DrawString(
-                    GameInstance.font, 
-                    text,
-                    new Vector2(DECK_POSITION.X, DECK_POSITION.Y + 25), 
-                    Color.White, 
-                    0.0f, 
-                    new Vector2(font.MeasureString(text).X/2 - drawDeckSize, 0), 
-                    1.0f, 
-                    SpriteEffects.None, 
-                    0.0f);
             }
+
+            string text = this.mainPlayer.Deck.Count.ToString();
+            spriteBatch.DrawString(
+                GameInstance.font,
+                text,
+                new Vector2(DECK_POSITION.X, DECK_POSITION.Y + 25),
+                Color.White,
+                0.0f,
+                new Vector2(font.MeasureString(text).X / 2 - drawDeckSize, 0),
+                1.0f,
+                SpriteEffects.None,
+                0.0f);
+
+            #region Draw player discard pile
+            texture = GameInstance.squareTexture;
+            position = new Vector2(DISCARD_POSITION.X, DISCARD_POSITION.Y);
+            destinationRectangle = getCardDestinationRectangle(position, 1.07f);
+            cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+            spriteBatch.Draw(texture, destinationRectangle, null, Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
+
+            texture = cardbackTexture;
+            position = new Vector2(DISCARD_POSITION.X, DISCARD_POSITION.Y);
+            destinationRectangle = getCardDestinationRectangle(position, 1.0f);
+            cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+            spriteBatch.Draw(texture, destinationRectangle, null, Color.White, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
+
+            int count = Math.Min(this.mainPlayer.DiscardPile.Count, 5);
+            if (count > 0)
+            {
+                int i;
+                for (i = 0; i < count; i++)
+                {
+                    texture = GameInstance.squareTexture;
+                    position = new Vector2(DISCARD_POSITION.X + i, DISCARD_POSITION.Y + i);
+                    destinationRectangle = getCardDestinationRectangle(position, 1.07f);
+                    cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+                    spriteBatch.Draw(texture, destinationRectangle, null, Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
+                }
+
+                texture = this.mainPlayer.DiscardPile[this.mainPlayer.DiscardPile.Count - 1].Texture;
+                position = new Vector2(DISCARD_POSITION.X + i, DISCARD_POSITION.Y + i);
+                destinationRectangle = getCardDestinationRectangle(position, 1.0f);
+                cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+                spriteBatch.Draw(texture, destinationRectangle, null, Color.White, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
+
+                texture = GameInstance.squareTexture;
+                position = new Vector2(DISCARD_POSITION.X + i, DISCARD_POSITION.Y + i);
+                destinationRectangle = getCardDestinationRectangle(position, 1.0f);
+                cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+                spriteBatch.Draw(texture, destinationRectangle, null, new Color(50, 100, 100, 50), 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
+            }
+            else
+            {
+                texture = GameInstance.squareTexture;
+                position = new Vector2(DISCARD_POSITION.X, DISCARD_POSITION.Y);
+                destinationRectangle = getCardDestinationRectangle(position, 1.0f);
+                cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+                spriteBatch.Draw(texture, destinationRectangle, null, new Color(50, 100, 100, 50), 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
+            }
+            #endregion
 
             // Draw animation
             List<SpriteAnimation> newAnimationList = new List<SpriteAnimation>();

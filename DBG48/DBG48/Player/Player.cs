@@ -54,12 +54,36 @@ namespace DBG48
                 this.Deck.Enqueue(card);
             }
             this.DiscardPile.Clear();
+
+            // Play Shuffle Sound
+            SoundEngine.Instance.PlaySoundEffect("cardTakeOutPackage2");
         }
 
         public void PlayCard(Card card)
         {
             this.Hand.Remove(card);
-            this.DiscardPile.Add(card);
+            this.game.playPile.Add(card);
+        }
+
+        public void EndTurn()
+        {
+            // Cards in play pile enters discard pile
+            foreach (Card card in this.game.playPile)
+            {
+                this.DiscardPile.Add(card);
+            }
+
+            foreach (Card card in this.Hand)
+            {
+                this.DiscardPile.Add(card);
+            }
+
+            // Reset play pile and hand
+            this.game.playPile.Clear();
+            this.Hand.Clear();
+
+            // End turn
+            this.game.currentGameState = GameState.PREGAME;
         }
     }
 }

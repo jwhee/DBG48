@@ -8,7 +8,7 @@ namespace DBG48
         public PlayZone(GameInstance game, Vector2 position)
             : base(game, position)
         {
-            this.cardList = this.game.mainPlayer.DiscardPile;
+            this.cardList = this.game.playPile;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

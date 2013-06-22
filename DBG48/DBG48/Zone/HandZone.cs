@@ -19,7 +19,7 @@ namespace DBG48
         {
             base.Update();
             // Right mouse click: Show CardSelectedOverlay
-            if (mouse_hover_index != -1)
+            if (mouse_hover_index != -1 && mouse_hover_index < this.cardDisplaySize)
             {
                 // Left mouse click: Play card
                 if (game.controller.isLeftMouseButtonClicked())
@@ -86,7 +86,7 @@ namespace DBG48
 
                 texture = GameInstance.uiTexture;
                 tempPosition = getHandCardPosition(0);
-                destinationRectangle = new Rectangle((int)tempPosition.X + 445, (int)tempPosition.Y, 24, 24);
+                destinationRectangle = new Rectangle((int)tempPosition.X + 400, (int)tempPosition.Y, 24, 24);
                 cardOrigin = new Vector2(8, 8);
                 spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
             }

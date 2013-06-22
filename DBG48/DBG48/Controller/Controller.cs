@@ -60,6 +60,11 @@ namespace DBG48
             return (ms.RightButton == ButtonState.Pressed) ? true : false;
         }
 
+        /// <summary>
+        /// Returns whether or not mouse is in region
+        /// </summary>
+        /// <param name="region">Region specified with Rectangle(center.x, center.y, width, height)</param>
+        /// <returns>Whether or not mouse is in region</returns>
         public bool isMouseInRegion(Rectangle region)
         {
             Rectangle actualRegion = new Rectangle(

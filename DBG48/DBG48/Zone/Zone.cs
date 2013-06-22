@@ -27,10 +27,18 @@ namespace DBG48
 
         public Rectangle getCardDestinationRectangle(Vector2 position, float scale)
         {
+            int width = (int)(GameInstance.CARD_WIDTH * GameInstance.CARD_SCALE * scale);
+            int height = (int)(GameInstance.CARD_HEIGHT * GameInstance.CARD_SCALE * scale);
             return new Rectangle((int)(position.X),
                                  (int)(position.Y),
-                                 (int)(GameInstance.CARD_WIDTH * GameInstance.CARD_SCALE * scale),
-                                 (int)(GameInstance.CARD_HEIGHT * GameInstance.CARD_SCALE * scale));
+                                 width,
+                                 height);
+        }
+
+        public Vector2 getHandCardPosition(int index)
+        {
+            return new Vector2(25 + position.X + 50 * index + (GameInstance.CARD_WIDTH * GameInstance.CARD_SCALE / 2),
+                               15 + position.Y + (GameInstance.CARD_HEIGHT * GameInstance.CARD_SCALE / 2));
         }
 
         public virtual void Update()
@@ -120,12 +128,6 @@ namespace DBG48
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.White, GameInstance.CARD_ROTATION, cardOrigin, SpriteEffects.None, 0.0f);
                 }
             }
-        }
-
-        public Vector2 getHandCardPosition(int index)
-        {
-            return new Vector2(25 + position.X + 50 * index + (GameInstance.CARD_WIDTH * GameInstance.CARD_SCALE / 2),
-                               15 + position.Y + (GameInstance.CARD_HEIGHT * GameInstance.CARD_SCALE / 2));
         }
 
         public void resetMouseHoverIndex()

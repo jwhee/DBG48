@@ -5,9 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DBG48
 {
-    /// <summary>
-    /// This is a game component that implements IUpdateable.
-    /// </summary>
     public class CardSelectedOverlay
     {
         private enum OverlayState
@@ -17,13 +14,15 @@ namespace DBG48
             FLY_OUT
         }
         
-        GameInstance game;
-        OverlayState state = OverlayState.FLY_IN;
-        Card card;
-        SpriteAnimation flyInAnimation;
-        SpriteAnimation flyOutAnimation;
-        int currentFrame;
-        Rectangle cardRectangle { get; set; }
+        private GameInstance game;
+        private OverlayState state = OverlayState.FLY_IN;
+        private Card card;
+        private SpriteAnimation flyInAnimation;
+        private SpriteAnimation flyOutAnimation;
+        private int currentFrame;
+
+        // Format: Rectangle(center.X, center.Y, width, height)
+        private Rectangle cardRectangle;
         private Rectangle viewPort;
 
         ButtonUI playButton;
@@ -48,15 +47,6 @@ namespace DBG48
 
             this.playButton = new ButtonUI(game, new Rectangle(550, 420, 300, 100), 1, "Play!");
             //this.resourceButton = new ButtonUI(game, new Rectangle(400, 400, 205, 50), 3, "Resource");
-        }
-
-        /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
-        /// </summary>
-        public void Initialize()
-        {
-            // TODO: Add your initialization code here
         }
 
         /// <summary>

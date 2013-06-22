@@ -29,9 +29,10 @@ namespace DBG48
         private Vector2 DECK_POSITION = new Vector2(60, 420);
         private Vector2 HANDZONE_POSITION = new Vector2(120, 360);
         private Vector2 PLAYZONE_POSITION = new Vector2(120, 240);
-        private Vector2 MARKET_POSITION = new Vector2(150, 10);
-        private Vector2 MARKET2_POSITION = new Vector2(190, 120);
+        private Vector2 MARKET_POSITION = new Vector2(170, 10);
+        private Vector2 MARKET2_POSITION = new Vector2(185, 120);
         private Vector2 DISCARD_POSITION = new Vector2(60, 300);
+        private string MARKET_NAME = "BACKSTAGE";
         public const float CARD_SCALE = 0.20f;
         public const int MAX_HAND_DISPLAY_SIZE = 8;
         private const int START_HAND_SIZE = 5;
@@ -360,11 +361,39 @@ namespace DBG48
                 SpriteEffects.None,
                 0.0f);
 
-            // Draw Card zones
-            handZone.Draw(spriteBatch);
-            playZone.Draw(spriteBatch);
+            // Draw Market
+            texture = GameInstance.squareTexture;
+            destinationRectangle = new Rectangle((int)MARKET_POSITION.X, (int)MARKET_POSITION.Y, 350, 230);
+            spriteBatch.Draw(texture, destinationRectangle, new Color(0, 0, 50, 20));
+
+            Vector2 marketTextPosition = new Vector2(font.MeasureString(MARKET_NAME).X + 10, 2);
+            spriteBatch.DrawString(
+                GameInstance.font,
+                MARKET_NAME,
+                new Vector2(MARKET_POSITION.X, MARKET_POSITION.Y),
+                Color.MidnightBlue,
+                0.0f - (float)Math.PI / 2,
+                new Vector2(marketTextPosition.X + 2, marketTextPosition.Y + 1),
+                1.0f,
+                SpriteEffects.None,
+                0.0f);
+            spriteBatch.DrawString(
+                GameInstance.font,
+                MARKET_NAME,
+                new Vector2(MARKET_POSITION.X, MARKET_POSITION.Y),
+                Color.White,
+                0.0f - (float)Math.PI/2,
+                new Vector2(marketTextPosition.X, marketTextPosition.Y),
+                1.0f,
+                SpriteEffects.None,
+                0.0f);
+
             marketZone.Draw(spriteBatch);
             market2Zone.Draw(spriteBatch);
+
+            // Draw Card zones
+            playZone.Draw(spriteBatch);
+            handZone.Draw(spriteBatch);
 
             #region Draw Player Deck
             int drawDeckSize = 10;

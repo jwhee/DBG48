@@ -1,10 +1,7 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace DBG48
 {
     /// <summary>
-    /// Card
+    /// CardInfoContainer
     /// </summary>
     public class CardInfoContainer
     {

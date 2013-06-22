@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace DBG48
 {
@@ -19,7 +11,7 @@ namespace DBG48
         private GameInstance game;
         private Rectangle destinationRectangle;
         private int buttonType;
-        private String text;
+        private string text;
 
         private Rectangle hoverRectangle;
         private bool isHover = false;
@@ -28,7 +20,7 @@ namespace DBG48
 
         private Vector2 stringSize;
 
-        public ButtonUI(GameInstance game, Rectangle destinationRectangle, int buttonType, String text)
+        public ButtonUI(GameInstance game, Rectangle destinationRectangle, int buttonType, string text)
         {
             this.game = game;
             this.destinationRectangle = destinationRectangle;

@@ -76,7 +76,6 @@ namespace DBG48
             controller = new Controller(this);
             randGen = new Random();
             mainPlayer = new Player(this);
-
         }
 
         /// <summary>

@@ -1,20 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-
 
 namespace DBG48
 {
-    /// <summary>
-    /// This is a game component that implements IUpdateable.
-    /// </summary>
     public class HandZone : Zone
     {
         Player mainPlayer;
@@ -39,7 +27,7 @@ namespace DBG48
                     Rectangle originRectangle;
                     Rectangle goalRectangle;
                     SpriteAnimation anim;
-                    int totalFrame = 20;
+                    int totalFrame = 15;
                     // Create card animation from hand zone to play zone
                     originRectangle = this.game.handZone.getCardDestinationRectangle(
                                         this.game.handZone.getHandCardPosition(mouse_hover_index), 1.07f);

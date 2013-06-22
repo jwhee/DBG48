@@ -59,15 +59,15 @@ namespace DBG48
         private int pregameFrameLeft = 20;
 
         public CardSelectedOverlay cardSelectedOverlay;
-        public HandZone handZone;
-        public PlayZone playZone;
-        public MarketZone marketZone;
-        public MarketZone market2Zone;
+        public HandZone HandZone;
+        public PlayZone PlayZone;
+        public MarketZone MarketZone;
+        public MarketZone Market2Zone;
 
         public List<Card> playPile;
 
-        public Player mainPlayer;
-        public List<SpriteAnimation> animationList;
+        public Player MainPlayer;
+        public List<SpriteAnimation> AnimationList;
 
         public GameInstance()
         {
@@ -84,7 +84,7 @@ namespace DBG48
 
             controller = new Controller();
             randGen = new Random();
-            mainPlayer = new Player(this);
+            MainPlayer = new Player(this);
 
             playPile = new List<Card>();
         }
@@ -140,85 +140,39 @@ namespace DBG48
             }
 
             // Dynamic load pictures
-            List<CardInfoContainer> cardInfoList = new List<CardInfoContainer>();
-            if (Directory.Exists(@"Content\Img\Card\"))
-            {
-                string[] directories = Directory.GetDirectories(@"Content\Img\Card\");
-                foreach (string directory in directories)
-                {
-                    string name = Path.GetFileName(directory);
-                    string[] filePaths = Directory.GetFiles(directory, "*.jpg");
-                    foreach (string path in filePaths)
-                    {
-                        cardInfoList.Add(new CardInfoContainer(path, name, ""));
-                    }
-                }
-            }
+            List<CardInfoContainer> cardInfoList = this.GenerateCardInfoList();
 
             // Initialize deck
             Queue<Card> deck = new Queue<Card>();
             for (int i = 0; i < START_DECK_SIZE; i++)
             {
-                if (cardInfoList.Count > 0)
-                {
-                    int index = randGen.Next(cardInfoList.Count);
-                    CardInfoContainer cardInfo = cardInfoList[index];
-                    FileStream stream = File.OpenRead(cardInfo.Filepath);
-                    Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
-                    stream.Close();
-                    deck.Enqueue(new Card(cardTexture, cardInfo.Name, cardInfo.Text));
-                }
-                else
-                {
-                    deck.Enqueue(new Card(squareTexture, "Empty Card", ""));
-                }
+                Card card = this.RandomlyGenerateCard(cardInfoList);
+                deck.Enqueue(card);
             }
-            this.mainPlayer.InitializeDeck(deck);
+            this.MainPlayer.InitializeDeck(deck);
 
             // Initialize market deck
-            marketZone = new MarketZone(this, MARKET_POSITION);
+            MarketZone = new MarketZone(this, MARKET_POSITION);
             for (int i = 0; i < 4; i++)
             {
-                if (cardInfoList.Count > 0)
-                {
-                    int index = randGen.Next(cardInfoList.Count);
-                    CardInfoContainer cardInfo = cardInfoList[index];
-                    FileStream stream = File.OpenRead(cardInfo.Filepath);
-                    Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
-                    stream.Close();
-                    marketZone.CardList.Add(new Card(cardTexture, cardInfo.Name, cardInfo.Text));
-                }
-                else
-                {
-                    marketZone.CardList.Add(new Card(squareTexture, "Empty Card", ""));
-                }
+                Card card = this.RandomlyGenerateCard(cardInfoList);
+                MarketZone.CardList.Add(card);
             }
 
             // Initialize market deck
-            market2Zone = new MarketZone(this, MARKET2_POSITION);
+            Market2Zone = new MarketZone(this, MARKET2_POSITION);
             for (int i = 0; i < 4; i++)
             {
-                if (cardInfoList.Count > 0)
-                {
-                    int index = randGen.Next(cardInfoList.Count);
-                    CardInfoContainer cardInfo = cardInfoList[index];
-                    FileStream stream = File.OpenRead(cardInfo.Filepath);
-                    Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
-                    stream.Close();
-                    market2Zone.CardList.Add(new Card(cardTexture, cardInfo.Name, cardInfo.Text));
-                }
-                else
-                {
-                    market2Zone.CardList.Add(new Card(squareTexture, "Empty Card", ""));
-                }
+                Card card = this.RandomlyGenerateCard(cardInfoList);
+                Market2Zone.CardList.Add(card);
             }
 
             // initialize starting hand
-            handZone = new HandZone(this, HANDZONE_POSITION);
-            playZone = new PlayZone(this, PLAYZONE_POSITION);
+            HandZone = new HandZone(this, HANDZONE_POSITION);
+            PlayZone = new PlayZone(this, PLAYZONE_POSITION);
             
             // initialize animation list
-            animationList = new List<SpriteAnimation>();
+            AnimationList = new List<SpriteAnimation>();
 
             // initialize sound engine
             if (Directory.Exists(@"Content\SFX\"))
@@ -269,7 +223,7 @@ namespace DBG48
                 // Update mouse
                 controller.Update();
 
-                foreach (SpriteAnimation animation in animationList)
+                foreach (SpriteAnimation animation in AnimationList)
                 {
                     animation.Update();
                 }
@@ -283,9 +237,9 @@ namespace DBG48
                     if (pregameFrameLeft <= 0)
                     {
                         pregameFrameLeft = 20;
-                        if (this.mainPlayer.Hand.Count < 5)
+                        if (this.MainPlayer.Hand.Count < 5)
                         {
-                            this.mainPlayer.DrawCard();
+                            this.MainPlayer.DrawCard();
                         }
                         else
                         {
@@ -301,17 +255,17 @@ namespace DBG48
                 else
                 {
                     // Update CardZones
-                    handZone.Update();
-                    playZone.Update();
-                    marketZone.Update();
-                    market2Zone.Update();
+                    HandZone.Update();
+                    PlayZone.Update();
+                    MarketZone.Update();
+                    Market2Zone.Update();
 
                     // DEBUG: Drawing card from a deck
                     if(controller.isMouseInRegion(getCardDestinationRectangle(DECK_POSITION, 1.0f)))
                     {
                         if(controller.isLeftMouseButtonClicked())
                         {
-                            this.mainPlayer.DrawCard();
+                            this.MainPlayer.DrawCard();
                         }
                     }
 
@@ -320,7 +274,7 @@ namespace DBG48
                     {
                         if (controller.isLeftMouseButtonClicked())
                         {
-                            this.mainPlayer.EndTurn();
+                            this.MainPlayer.EndTurn();
                         }
                     }
                 }
@@ -388,12 +342,12 @@ namespace DBG48
                 SpriteEffects.None,
                 0.0f);
 
-            marketZone.Draw(spriteBatch);
-            market2Zone.Draw(spriteBatch);
+            MarketZone.Draw(spriteBatch);
+            Market2Zone.Draw(spriteBatch);
 
             // Draw Card zones
-            playZone.Draw(spriteBatch);
-            handZone.Draw(spriteBatch);
+            PlayZone.Draw(spriteBatch);
+            HandZone.Draw(spriteBatch);
 
             #region Draw Player Deck
             int drawDeckSize = 10;
@@ -412,7 +366,7 @@ namespace DBG48
                 spriteBatch.Draw(texture, destinationRectangle, null, Color.White, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
             }
 
-            string text = this.mainPlayer.Deck.Count.ToString();
+            string text = this.MainPlayer.Deck.Count.ToString();
             spriteBatch.DrawString(
                 GameInstance.font,
                 text,
@@ -438,7 +392,7 @@ namespace DBG48
             cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
             spriteBatch.Draw(texture, destinationRectangle, null, Color.White, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
 
-            int count = Math.Min(this.mainPlayer.DiscardPile.Count, 5);
+            int count = Math.Min(this.MainPlayer.DiscardPile.Count, 5);
             if (count > 0)
             {
                 int i;
@@ -451,7 +405,7 @@ namespace DBG48
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
                 }
 
-                texture = this.mainPlayer.DiscardPile[this.mainPlayer.DiscardPile.Count - 1].Texture;
+                texture = this.MainPlayer.DiscardPile[this.MainPlayer.DiscardPile.Count - 1].Texture;
                 position = new Vector2(DISCARD_POSITION.X + i, DISCARD_POSITION.Y + i);
                 destinationRectangle = getCardDestinationRectangle(position, 1.0f);
                 cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
@@ -475,7 +429,7 @@ namespace DBG48
 
             // Draw animation
             List<SpriteAnimation> newAnimationList = new List<SpriteAnimation>();
-            foreach (SpriteAnimation animation in animationList)
+            foreach (SpriteAnimation animation in AnimationList)
             {
                 animation.Draw(spriteBatch);
                 if (!animation.Finished())
@@ -483,7 +437,7 @@ namespace DBG48
                     newAnimationList.Add(animation);
                 }
             }
-            animationList = newAnimationList;
+            AnimationList = newAnimationList;
 
             // Draw card selected overlay
             if (currentGameState == GameState.OVERLAY)
@@ -507,8 +461,48 @@ namespace DBG48
 
         public void returnToPlayable()
         {
-            handZone.resetMouseHoverIndex();
+            HandZone.resetMouseHoverIndex();
             currentGameState = GameState.PLAYABLE;
+        }
+
+        private List<CardInfoContainer> GenerateCardInfoList()
+        {
+            List<CardInfoContainer> CardInfoList = new List<CardInfoContainer>();
+            if (Directory.Exists(@"Content\Img\Card\"))
+            {
+                string[] directories = Directory.GetDirectories(@"Content\Img\Card\");
+                foreach (string directory in directories)
+                {
+                    string name = Path.GetFileName(directory);
+                    string[] filePaths = Directory.GetFiles(directory, "*.jpg");
+                    foreach (string path in filePaths)
+                    {
+                        CardInfoList.Add(new CardInfoContainer(path, name, ""));
+                    }
+                }
+            }
+            return CardInfoList;
+        }
+
+        public Card RandomlyGenerateCard(List<CardInfoContainer> CardInfoList = null)
+        {
+            List<CardInfoContainer> cardInfoList = CardInfoList;
+            if (cardInfoList == null)
+            {
+                cardInfoList = this.GenerateCardInfoList();
+            }
+
+            if (cardInfoList.Count > 0)
+            {
+                int index = randGen.Next(cardInfoList.Count);
+                CardInfoContainer cardInfo = cardInfoList[index];
+                FileStream stream = File.OpenRead(cardInfo.Filepath);
+                Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
+                stream.Close();
+
+                return new Card(cardTexture, cardInfo.Name, cardInfo.Text);
+            }
+            return new Card(squareTexture, "Empty Card", "");
         }
     }
 }

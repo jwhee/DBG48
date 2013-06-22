@@ -10,8 +10,8 @@ namespace DBG48
         public HandZone(GameInstance game, Vector2 position)
             : base(game, position)
         {
-            this.CardList = this.game.mainPlayer.Hand;
-            this.mainPlayer = this.game.mainPlayer;
+            this.CardList = this.game.MainPlayer.Hand;
+            this.mainPlayer = this.game.MainPlayer;
             this.cardDisplaySize = GameInstance.MAX_HAND_DISPLAY_SIZE;
         }
 
@@ -29,10 +29,10 @@ namespace DBG48
                     SpriteAnimation anim;
                     int totalFrame = 15;
                     // Create card animation from hand zone to play zone
-                    originRectangle = this.game.handZone.getCardDestinationRectangle(
-                                        this.game.handZone.getHandCardPosition(mouse_hover_index), 1.07f);
-                    goalRectangle = this.game.playZone.getCardDestinationRectangle(
-                                        this.game.playZone.getHandCardPosition(this.game.playZone.CardList.Count), 1.07f);
+                    originRectangle = this.game.HandZone.getCardDestinationRectangle(
+                                        this.game.HandZone.getHandCardPosition(mouse_hover_index), 1.07f);
+                    goalRectangle = this.game.PlayZone.getCardDestinationRectangle(
+                                        this.game.PlayZone.getHandCardPosition(this.game.PlayZone.CardList.Count), 1.07f);
                     anim = new SpriteAnimation(this.game,
                                                GameInstance.squareTexture,
                                                originRectangle,
@@ -42,12 +42,12 @@ namespace DBG48
                                                GameInstance.CARD_ROTATION,
                                                true,
                                                Color.Black);
-                    this.game.animationList.Add(anim);
+                    this.game.AnimationList.Add(anim);
 
-                    originRectangle = this.game.handZone.getCardDestinationRectangle(
-                                        this.game.handZone.getHandCardPosition(mouse_hover_index), 1.0f);
-                    goalRectangle = this.game.playZone.getCardDestinationRectangle(
-                                        this.game.playZone.getHandCardPosition(this.game.playZone.CardList.Count), 1.0f);
+                    originRectangle = this.game.HandZone.getCardDestinationRectangle(
+                                        this.game.HandZone.getHandCardPosition(mouse_hover_index), 1.0f);
+                    goalRectangle = this.game.PlayZone.getCardDestinationRectangle(
+                                        this.game.PlayZone.getHandCardPosition(this.game.PlayZone.CardList.Count), 1.0f);
                     anim = new SpriteAnimation(this.game,
                                                this.mainPlayer.Hand[mouse_hover_index].Texture,
                                                originRectangle,
@@ -57,9 +57,9 @@ namespace DBG48
                                                GameInstance.CARD_ROTATION,
                                                true,
                                                Color.White,
-                                               this.game.playZone.IncrementDisplaySize,
+                                               this.game.PlayZone.IncrementDisplaySize,
                                                "cardSlide3");
-                    this.game.animationList.Add(anim);
+                    this.game.AnimationList.Add(anim);
 
                     // Play Card
                     this.mainPlayer.PlayCard(this.mainPlayer.Hand[mouse_hover_index]);

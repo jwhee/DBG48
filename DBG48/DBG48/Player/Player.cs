@@ -87,5 +87,10 @@ namespace DBG48
             // End turn
             this.game.currentGameState = GameState.PREGAME;
         }
+
+        public void BuyCard(Card card)
+        {
+            this.DiscardPile.Add(card);
+        }
     }
 }

@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Card\CardInfoContainer.cs" />
     <Compile Include="Player\Player.cs" />
+    <Compile Include="SoundEngine.cs" />
     <Compile Include="UI\ButtonUI.cs" />
     <Compile Include="Card\Card.cs" />
     <Compile Include="Overlay\CardSelectedOverlay.cs" />

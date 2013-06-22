@@ -34,6 +34,7 @@ namespace DBG48
                 return;
             }
 
+            SoundEngine.Instance.PlaySoundEffect("cardSlide4");
             Hand.Add(this.Deck.Dequeue());
         }
 

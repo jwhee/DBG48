@@ -26,14 +26,20 @@ namespace DBG48
             MouseState next_ms = Mouse.GetState();
 
             this.isLeftMouseClicked = false;
-            if (ms.LeftButton == ButtonState.Pressed && 
+            if (ms.LeftButton == ButtonState.Pressed &&
                 next_ms.LeftButton == ButtonState.Released)
+            {
+                SoundEngine.Instance.PlaySoundEffect("");
                 isLeftMouseClicked = true;
+            }
 
             this.isRightMouseClicked = false;
-            if (ms.RightButton == ButtonState.Pressed && 
+            if (ms.RightButton == ButtonState.Pressed &&
                 next_ms.RightButton == ButtonState.Released)
+            {
+                SoundEngine.Instance.PlaySoundEffect("");
                 isRightMouseClicked = true;
+            }
 
             ms = next_ms;
         }

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -14,7 +15,7 @@ namespace DBG48
 {
     public enum GameState
     {
-        PLAYABLE, ANIMATION, OVERLAY
+        PREGAME, PLAYABLE, ANIMATION, OVERLAY
     }
     /// <summary>
     /// This is the main type for your game
@@ -49,12 +50,11 @@ namespace DBG48
         float elapsedTime = 0.0f;
 
         public Controller controller;
-        public GameState currentGameState = GameState.PLAYABLE;
+        public GameState currentGameState = GameState.PREGAME;
+        private int pregameFrameLeft = 100;
 
         public CardSelectedOverlay cardSelectedOverlay;
         public HandZone handZone;
-        //public Queue<Card> deck;
-        //public List<Card> discard;
         public PlayZone playZone;
 
         public Player mainPlayer;
@@ -167,10 +167,20 @@ namespace DBG48
 
             // initialize animation list
             animationList = new List<SpriteAnimation>();
-            // Draw starting hand?
-            for (int i = 0; i < START_HAND_SIZE; i++)
+
+            // initialize sound engine
+            if (Directory.Exists(@"Content\SFX\"))
             {
-                mainPlayer.DrawCard();
+                string[] filePaths = Directory.GetFiles(@"Content\SFX\", "*");
+                foreach(string path in filePaths)
+                {
+                    Match match = Regex.Match(path, @"Content\\SFX\\(.*)\.xnb", RegexOptions.None);
+                    if (match.Success)
+                    {
+                        string key = match.Groups[1].Value;
+                        SoundEngine.Instance.RegisterSoundEffect(key, Content.Load<SoundEffect>(@"SFX\"+key));
+                    }
+                }
             }
         }
 
@@ -213,7 +223,23 @@ namespace DBG48
                 }
 
                 // Check GameState
-                if (currentGameState == GameState.OVERLAY)
+                if (currentGameState == GameState.PREGAME)
+                {
+                    this.pregameFrameLeft--;
+
+
+                    // Draw starting hand?
+                    if (pregameFrameLeft/20 < START_HAND_SIZE - mainPlayer.Hand.Count)
+                    {
+                        mainPlayer.DrawCard();
+                    }
+
+                    if (this.pregameFrameLeft <= 0)
+                    {
+                        this.currentGameState = GameState.PLAYABLE;
+                    }
+                }
+                else if (currentGameState == GameState.OVERLAY)
                 {
                     // Update CardSelectedOverlay
                     cardSelectedOverlay.Update();

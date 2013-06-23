@@ -17,7 +17,8 @@ namespace DBG48
 
         protected int zoneWidth = 480;
         protected int zoneHeight = 120;
-        protected int cardDisplaySize;
+        protected int cardDisplaySize = 5;
+        public int cardDisplayStartIndex = 0;
 
 
         protected float cardRotation = GameInstance.CARD_ROTATION;
@@ -63,16 +64,17 @@ namespace DBG48
             {
                 if (game.controller.isRightMouseButtonClicked())
                 {
+                    int cardIndex = mouse_hover_index + this.cardDisplayStartIndex;
                     // Create overlay
                     game.currentGameState = GameState.OVERLAY;
-                    Rectangle originRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.2f);
+                    Rectangle originRectangle = getCardDestinationRectangle(getHandCardPosition(cardIndex), 1.2f);
                     Rectangle goalRectangle = getCardDestinationRectangle(
                         new Vector2(game.GraphicsDevice.PresentationParameters.Bounds.Width / 2 - 200,
                             game.GraphicsDevice.PresentationParameters.Bounds.Height / 2),
                         5.0f);
                     game.cardSelectedOverlay = new CardSelectedOverlay(
                         this.game,
-                        this.CardList[mouse_hover_index],
+                        this.CardList[cardIndex],
                         originRectangle,
                         goalRectangle,
                         this.cardRotation,
@@ -95,7 +97,9 @@ namespace DBG48
             // Draw hand
             for (int i = 0; i < this.cardDisplaySize; i++)
             {
-                if (mouse_hover_index != i && i < this.CardList.Count)
+                int cardIndex = i + this.cardDisplayStartIndex;
+
+                if (mouse_hover_index != i && cardIndex < this.CardList.Count)
                 {
                     // Draw frame
                     texture = GameInstance.squareTexture;
@@ -104,7 +108,7 @@ namespace DBG48
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.Black, this.cardRotation, cardOrigin, SpriteEffects.None, 0.0f);
 
                     // Draw other cards
-                    texture = this.CardList[i].Texture;
+                    texture = this.CardList[cardIndex].Texture;
                     destinationRectangle = getCardDestinationRectangle(getHandCardPosition(i), 1.0f);
                     cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.White, this.cardRotation, cardOrigin, SpriteEffects.None, 0.0f);
@@ -114,9 +118,11 @@ namespace DBG48
             // Draw hover
             if (game.currentGameState == GameState.PLAYABLE)
             {
+                int cardIndex = mouse_hover_index + this.cardDisplayStartIndex;
+
                 if (mouse_hover_index != -1
                     && mouse_hover_index < this.cardDisplaySize
-                    && mouse_hover_index < this.CardList.Count)
+                    && cardIndex < this.CardList.Count)
                 {
                     // Draw highlight
                     texture = GameInstance.squareTexture;
@@ -125,7 +131,7 @@ namespace DBG48
                     spriteBatch.Draw(texture, destinationRectangle, null, this.getHoverFrameColor(), this.cardRotation, cardOrigin, SpriteEffects.None, 0.0f);
 
                     // Draw hovered card
-                    texture = this.CardList[mouse_hover_index].Texture;
+                    texture = this.CardList[cardIndex].Texture;
                     destinationRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.2f);
                     cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.White, this.cardRotation, cardOrigin, SpriteEffects.None, 0.0f);

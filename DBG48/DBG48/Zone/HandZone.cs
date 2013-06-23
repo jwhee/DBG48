@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace DBG48
 {
@@ -27,12 +28,14 @@ namespace DBG48
                     Rectangle originRectangle;
                     Rectangle goalRectangle;
                     SpriteAnimation anim;
-                    int totalFrame = 15;
+                    int totalFrame = 20;
+
                     // Create card animation from hand zone to play zone
+                    int playZoneIndex = Math.Min(this.game.PlayZone.CardList.Count, 4);
                     originRectangle = this.getCardDestinationRectangle(
                                         this.getHandCardPosition(mouse_hover_index), 1.07f);
                     goalRectangle = this.game.PlayZone.getCardDestinationRectangle(
-                                        this.game.PlayZone.getHandCardPosition(this.game.PlayZone.CardList.Count), 1.07f);
+                                        this.game.PlayZone.getHandCardPosition(playZoneIndex), 1.07f);
                     anim = new SpriteAnimation(this.game,
                                                GameInstance.squareTexture,
                                                originRectangle,
@@ -47,7 +50,7 @@ namespace DBG48
                     originRectangle = this.getCardDestinationRectangle(
                                         this.getHandCardPosition(mouse_hover_index), 1.0f);
                     goalRectangle = this.game.PlayZone.getCardDestinationRectangle(
-                                        this.game.PlayZone.getHandCardPosition(this.game.PlayZone.CardList.Count), 1.0f);
+                                        this.game.PlayZone.getHandCardPosition(playZoneIndex), 1.0f);
                     anim = new SpriteAnimation(this.game,
                                                this.mainPlayer.Hand[mouse_hover_index].Texture,
                                                originRectangle,
@@ -75,8 +78,8 @@ namespace DBG48
             Rectangle destinationRectangle;
             Vector2 cardOrigin;
 
-            // TEST: arrow buttons
-            if (this.mainPlayer.Hand.Count > GameInstance.MAX_HAND_DISPLAY_SIZE)
+            // Arrow buttons
+            if (this.CardList.Count > this.cardDisplaySize)
             {
                 texture = GameInstance.uiTexture;
                 Vector2 tempPosition = getHandCardPosition(0);

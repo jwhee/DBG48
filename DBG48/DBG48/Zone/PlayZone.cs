@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,7 +9,7 @@ namespace DBG48
         public PlayZone(GameInstance game, Vector2 position)
             : base(game, position)
         {
-            this.CardList = this.game.playPile;
+            this.CardList = new List<Card>();
             this.zoneWidth = 320;
         }
 
@@ -45,12 +46,38 @@ namespace DBG48
                 0.0f);
 
             base.Draw(spriteBatch);
+
+            // Arrow buttons
+            
+            if (this.CardList.Count > 5)
+            {
+                // Arrow
+                texture = GameInstance.uiTexture;
+                Vector2 tempPosition = getHandCardPosition(0);
+                destinationRectangle = new Rectangle((int)tempPosition.X - 50, (int)tempPosition.Y, 24, 24);
+                Vector2 uiOrigin = new Vector2(8, 8);
+                spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+
+                texture = GameInstance.uiTexture;
+                destinationRectangle = new Rectangle((int)tempPosition.X + 250, (int)tempPosition.Y, 24, 24);
+                uiOrigin = new Vector2(8, 8);
+                spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+            }
         }
 
         // For callback
         public void IncrementDisplaySize(object obj = null)
         {
-            this.cardDisplaySize++;
+            if(this.cardDisplaySize >= 5)
+                this.cardDisplayStartIndex++;
+            else
+                this.cardDisplaySize++;
+        }
+
+        public void Reset()
+        {
+            this.CardList.Clear();
+            this.cardDisplayStartIndex = 0;
         }
     }
 }

@@ -64,13 +64,13 @@ namespace DBG48
         public void PlayCard(Card card)
         {
             this.Hand.Remove(card);
-            this.game.playPile.Add(card);
+            this.game.PlayZone.CardList.Add(card);
         }
 
         public void EndTurn()
         {
             // Cards in play pile enters discard pile
-            foreach (Card card in this.game.playPile)
+            foreach (Card card in this.game.PlayZone.CardList)
             {
                 this.DiscardPile.Add(card);
             }
@@ -81,7 +81,7 @@ namespace DBG48
             }
 
             // Reset play pile and hand
-            this.game.playPile.Clear();
+            this.game.PlayZone.Reset();
             this.Hand.Clear();
 
             // End turn

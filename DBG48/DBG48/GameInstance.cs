@@ -64,8 +64,6 @@ namespace DBG48
         public MarketZone MarketZone;
         public MarketZone Market2Zone;
 
-        public List<Card> playPile;
-
         public Player MainPlayer;
         public List<SpriteAnimation> AnimationList;
 
@@ -85,8 +83,6 @@ namespace DBG48
             controller = new Controller();
             randGen = new Random();
             MainPlayer = new Player(this);
-
-            playPile = new List<Card>();
         }
 
         /// <summary>

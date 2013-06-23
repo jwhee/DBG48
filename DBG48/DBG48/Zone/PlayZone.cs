@@ -59,7 +59,7 @@ namespace DBG48
                 spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
 
                 texture = GameInstance.uiTexture;
-                destinationRectangle = new Rectangle((int)tempPosition.X + 250, (int)tempPosition.Y, 24, 24);
+                destinationRectangle = new Rectangle((int)tempPosition.X + 245, (int)tempPosition.Y, 24, 24);
                 uiOrigin = new Vector2(8, 8);
                 spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
             }

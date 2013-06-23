@@ -67,7 +67,7 @@ namespace DBG48
                     int cardIndex = mouse_hover_index + this.cardDisplayStartIndex;
                     // Create overlay
                     game.currentGameState = GameState.OVERLAY;
-                    Rectangle originRectangle = getCardDestinationRectangle(getHandCardPosition(cardIndex), 1.2f);
+                    Rectangle originRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.2f);
                     Rectangle goalRectangle = getCardDestinationRectangle(
                         new Vector2(game.GraphicsDevice.PresentationParameters.Bounds.Width / 2 - 200,
                             game.GraphicsDevice.PresentationParameters.Bounds.Height / 2),

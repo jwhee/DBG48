@@ -18,6 +18,7 @@ namespace DBG48
         protected int zoneWidth = 480;
         protected int zoneHeight = 120;
         protected int cardDisplaySize = 5;
+        protected int maxCardDisplaySize = 5;
         protected int cardDisplayStartIndex = 0;
         protected int maxDisplayStartIndex = 0;
 
@@ -139,10 +140,10 @@ namespace DBG48
             }
         }
 
-        public void resetMouseHoverIndex()
-        {
-            this.mouse_hover_index = -1;
-        }
+        //public void resetMouseHoverIndex()
+        //{
+        //    this.mouse_hover_index = -1;
+        //}
 
         protected virtual Color getHoverFrameColor()
         {

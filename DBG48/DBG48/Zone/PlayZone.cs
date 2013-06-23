@@ -17,24 +17,24 @@ namespace DBG48
         {
             base.Update();
 
-            if (this.CardList.Count > 5)
+            if (this.CardList.Count > this.maxCardDisplaySize)
             {
                 if (game.controller.isLeftMouseButtonClicked())
                 {
                     // Left Arrow
                     Vector2 tempPosition = getHandCardPosition(0);
-                    Rectangle destinationRectangle = new Rectangle((int)tempPosition.X - 50, (int)tempPosition.Y, 24, 24);
-                    if(this.game.controller.isMouseInRegion(destinationRectangle))
+                    Rectangle hoverRectangle = new Rectangle((int)tempPosition.X - 50, (int)tempPosition.Y, 30, 30);
+                    if(this.game.controller.isMouseInRegion(hoverRectangle))
                     {
                         if (this.cardDisplayStartIndex > 0)
                             this.cardDisplayStartIndex--;
                     }
 
                     // Right Arrow
-                    destinationRectangle = new Rectangle((int)tempPosition.X + 245, (int)tempPosition.Y, 24, 24);
-                    if (this.game.controller.isMouseInRegion(destinationRectangle))
+                    hoverRectangle = new Rectangle((int)tempPosition.X + 245, (int)tempPosition.Y, 30, 30);
+                    if (this.game.controller.isMouseInRegion(hoverRectangle))
                     {
-                        if (this.cardDisplayStartIndex + 5 < this.CardList.Count
+                        if (this.cardDisplayStartIndex + this.maxCardDisplaySize < this.CardList.Count
                             && this.cardDisplayStartIndex < this.maxDisplayStartIndex)
                             this.cardDisplayStartIndex++;
                     }
@@ -77,8 +77,8 @@ namespace DBG48
             base.Draw(spriteBatch);
 
             // Arrow buttons
-            
-            if (this.CardList.Count > 5)
+
+            if (this.CardList.Count > this.maxCardDisplaySize)
             {
                 Vector2 tempPosition = getHandCardPosition(0);
 
@@ -87,17 +87,39 @@ namespace DBG48
                 {
                     texture = GameInstance.uiTexture;
                     destinationRectangle = new Rectangle((int)tempPosition.X - 50, (int)tempPosition.Y, 24, 24);
+                    Rectangle hoverRectangle = new Rectangle(destinationRectangle.X, destinationRectangle.Y, 30, 30);
                     Vector2 uiOrigin = new Vector2(8, 8);
-                    spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+
+                    // hover
+                    if (this.game.controller.isMouseInRegion(hoverRectangle)
+                        && !this.game.controller.isLeftMouseButtonPressed())
+                    {
+                        spriteBatch.Draw(texture, hoverRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+                    }
                 }
 
-                if (this.cardDisplayStartIndex + 5 < this.CardList.Count
+                if (this.cardDisplayStartIndex + this.maxCardDisplaySize < this.CardList.Count
                     && this.cardDisplayStartIndex < this.maxDisplayStartIndex)
                 {
                     texture = GameInstance.uiTexture;
                     destinationRectangle = new Rectangle((int)tempPosition.X + 245, (int)tempPosition.Y, 24, 24);
+                    Rectangle hoverRectangle = new Rectangle(destinationRectangle.X, destinationRectangle.Y, 30, 30);
                     Vector2 uiOrigin = new Vector2(8, 8);
-                    spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+
+                    // hover
+                    if (this.game.controller.isMouseInRegion(hoverRectangle)
+                        && !this.game.controller.isLeftMouseButtonPressed())
+                    {
+                        spriteBatch.Draw(texture, hoverRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+                    }
                 }
             }
         }
@@ -105,7 +127,7 @@ namespace DBG48
         // For callback
         public void IncrementDisplaySize(object obj = null)
         {
-            if (this.cardDisplaySize >= 5)
+            if (this.cardDisplaySize >= this.maxCardDisplaySize)
             {
                 this.maxDisplayStartIndex++;
                 this.cardDisplayStartIndex = this.maxDisplayStartIndex;

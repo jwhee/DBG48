@@ -427,6 +427,15 @@ namespace DBG48
                 cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
                 spriteBatch.Draw(texture, destinationRectangle, null, new Color(50, 100, 100, 50), 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
             }
+
+            string discardPileText = "OFF";
+            Vector2 discardPileTextPosition = new Vector2(DISCARD_POSITION.X - 80, DISCARD_POSITION.Y + 50);
+            Vector2 offset = new Vector2(2, -1);
+            this.DrawText(spriteBatch, discardPileText, discardPileTextPosition, Color.Black, null, offset, (float)(0 - Math.PI / 2));
+
+            discardPileText = "STAGE";
+            discardPileTextPosition = new Vector2(discardPileTextPosition.X + 18, discardPileTextPosition.Y);
+            this.DrawText(spriteBatch, discardPileText, discardPileTextPosition, Color.Black, null, offset, (float)(0 - Math.PI / 2));
             #endregion
 
             // Draw animation
@@ -463,7 +472,7 @@ namespace DBG48
 
         public void returnToPlayable()
         {
-            HandZone.resetMouseHoverIndex();
+            //HandZone.resetMouseHoverIndex();
             currentGameState = GameState.PLAYABLE;
         }
 
@@ -505,6 +514,54 @@ namespace DBG48
                 return new Card(cardTexture, cardInfo.Name, cardInfo.Text);
             }
             return new Card(squareTexture, "Empty Card", "");
+        }
+
+        public void DrawText(
+            SpriteBatch spriteBatch, 
+            string text,
+            Vector2 textPosition,
+            Color? frontColor = null,
+            Color? backColor = null,
+            Vector2? offset = null,
+            float rotation = 0.0f,
+            float scale = 1.0f)
+        {
+            if (frontColor == null)
+            {
+                frontColor = Color.White;
+            }
+
+            Vector2 offsetPos = new Vector2(2, 1);
+            if (offset != null)
+            {
+                offsetPos.X = offset.Value.X;
+                offsetPos.Y = offset.Value.Y;
+            }
+
+            if (backColor != null)
+            {
+                spriteBatch.DrawString(
+                    GameInstance.font,
+                    text,
+                    textPosition,
+                    backColor.Value,
+                    rotation,
+                    Vector2.Zero,
+                    scale,
+                    SpriteEffects.None,
+                    0.0f);
+            }
+
+            spriteBatch.DrawString(
+                GameInstance.font,
+                text,
+                new Vector2(textPosition.X + offsetPos.X, textPosition.Y + offsetPos.Y),
+                frontColor.Value,
+                rotation,
+                Vector2.Zero,
+                scale,
+                SpriteEffects.None,
+                0.0f);
         }
     }
 }

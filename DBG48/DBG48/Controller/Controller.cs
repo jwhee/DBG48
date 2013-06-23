@@ -8,9 +8,11 @@ namespace DBG48
         MouseState ms;
         private bool isLeftMouseClicked;
         private bool isRightMouseClicked;
+        private GameInstance game;
 
-        public Controller()
+        public Controller(GameInstance game)
         {
+            this.game = game;
         }
 
         /// <summary>
@@ -22,16 +24,18 @@ namespace DBG48
             MouseState next_ms = Mouse.GetState();
 
             this.isLeftMouseClicked = false;
-            if (ms.LeftButton == ButtonState.Pressed &&
-                next_ms.LeftButton == ButtonState.Released)
+            if (ms.LeftButton == ButtonState.Pressed 
+                && next_ms.LeftButton == ButtonState.Released 
+                && this.game.IsActive)
             {
                 SoundEngine.Instance.PlaySoundEffect("");
                 isLeftMouseClicked = true;
             }
 
             this.isRightMouseClicked = false;
-            if (ms.RightButton == ButtonState.Pressed &&
-                next_ms.RightButton == ButtonState.Released)
+            if (ms.RightButton == ButtonState.Pressed 
+                && next_ms.RightButton == ButtonState.Released 
+                && this.game.IsActive)
             {
                 SoundEngine.Instance.PlaySoundEffect("");
                 isRightMouseClicked = true;
@@ -47,7 +51,7 @@ namespace DBG48
 
         public bool isLeftMouseButtonPressed()
         {
-            return (ms.LeftButton == ButtonState.Pressed) ? true : false;
+            return (ms.LeftButton == ButtonState.Pressed && this.game.IsActive) ? true : false;
         }
 
         public bool isRightMouseButtonClicked()
@@ -57,7 +61,7 @@ namespace DBG48
 
         public bool isRightMouseButtonPressed()
         {
-            return (ms.RightButton == ButtonState.Pressed) ? true : false;
+            return (ms.RightButton == ButtonState.Pressed && this.game.IsActive) ? true : false;
         }
 
         /// <summary>

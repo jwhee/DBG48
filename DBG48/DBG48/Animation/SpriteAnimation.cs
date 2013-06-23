@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DBG48
 {
-    public delegate void Callback();
+    public delegate void Callback(object obj = null);
 
     /// <summary>
     /// This is a game component that implements IUpdateable.
@@ -26,6 +26,7 @@ namespace DBG48
         // Call when finished
         private Callback performAnimationFinishedAction;
         private string animationFinishedSFXKey;
+        private object callbackParam;
 
         public SpriteAnimation(
             Game game,
@@ -37,7 +38,6 @@ namespace DBG48
             float goalRotation = 0.0f,
             bool rotateClockwise = true,
             Color? color = null,
-            Callback animationFinishedAction = null,
             string animationFinishedSFXKey = null
             )
         {
@@ -55,11 +55,15 @@ namespace DBG48
             else
                 this.color = color.Value;
 
-            this.performAnimationFinishedAction = animationFinishedAction;
-
             this.animationFinishedSFXKey = animationFinishedSFXKey;
 
             this.currentFrame = 0;
+        }
+
+        public void RegisterCallback(Callback cb, object obj = null)
+        {
+            this.performAnimationFinishedAction = cb;
+            this.callbackParam = obj;
         }
 
         /// <summary>
@@ -74,7 +78,7 @@ namespace DBG48
             if (this.Finished())
             {
                 if(performAnimationFinishedAction != null)
-                    performAnimationFinishedAction();
+                    performAnimationFinishedAction(this.callbackParam);
                 if(!string.IsNullOrWhiteSpace(this.animationFinishedSFXKey))
                     SoundEngine.Instance.PlaySoundEffect(this.animationFinishedSFXKey);
             }

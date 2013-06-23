@@ -20,7 +20,7 @@ namespace DBG48
         }
 
         // For callback
-        public void IncrementDisplaySize()
+        public void IncrementDisplaySize(object obj = null)
         {
             this.cardDisplaySize++;
         }

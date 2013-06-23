@@ -31,7 +31,7 @@ namespace DBG48
         private Vector2 PLAYZONE_POSITION = new Vector2(120, 240);
         private Vector2 MARKET_POSITION = new Vector2(170, 10);
         private Vector2 MARKET2_POSITION = new Vector2(185, 120);
-        private Vector2 DISCARD_POSITION = new Vector2(60, 300);
+        public Vector2 DISCARD_POSITION = new Vector2(60, 300);
         private string MARKET_NAME = "BACKSTAGE";
         public const float CARD_SCALE = 0.20f;
         public const int MAX_HAND_DISPLAY_SIZE = 8;
@@ -404,6 +404,12 @@ namespace DBG48
                     cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
                     spriteBatch.Draw(texture, destinationRectangle, null, Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
                 }
+
+                texture = GameInstance.squareTexture;
+                position = new Vector2(DISCARD_POSITION.X + i, DISCARD_POSITION.Y + i);
+                destinationRectangle = getCardDestinationRectangle(position, 1.07f);
+                cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+                spriteBatch.Draw(texture, destinationRectangle, null, Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
 
                 texture = this.MainPlayer.DiscardPile[this.MainPlayer.DiscardPile.Count - 1].Texture;
                 position = new Vector2(DISCARD_POSITION.X + i, DISCARD_POSITION.Y + i);

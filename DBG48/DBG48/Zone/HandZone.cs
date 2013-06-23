@@ -29,8 +29,8 @@ namespace DBG48
                     SpriteAnimation anim;
                     int totalFrame = 15;
                     // Create card animation from hand zone to play zone
-                    originRectangle = this.game.HandZone.getCardDestinationRectangle(
-                                        this.game.HandZone.getHandCardPosition(mouse_hover_index), 1.07f);
+                    originRectangle = this.getCardDestinationRectangle(
+                                        this.getHandCardPosition(mouse_hover_index), 1.07f);
                     goalRectangle = this.game.PlayZone.getCardDestinationRectangle(
                                         this.game.PlayZone.getHandCardPosition(this.game.PlayZone.CardList.Count), 1.07f);
                     anim = new SpriteAnimation(this.game,
@@ -44,8 +44,8 @@ namespace DBG48
                                                Color.Black);
                     this.game.AnimationList.Add(anim);
 
-                    originRectangle = this.game.HandZone.getCardDestinationRectangle(
-                                        this.game.HandZone.getHandCardPosition(mouse_hover_index), 1.0f);
+                    originRectangle = this.getCardDestinationRectangle(
+                                        this.getHandCardPosition(mouse_hover_index), 1.0f);
                     goalRectangle = this.game.PlayZone.getCardDestinationRectangle(
                                         this.game.PlayZone.getHandCardPosition(this.game.PlayZone.CardList.Count), 1.0f);
                     anim = new SpriteAnimation(this.game,
@@ -57,8 +57,8 @@ namespace DBG48
                                                GameInstance.CARD_ROTATION,
                                                true,
                                                Color.White,
-                                               this.game.PlayZone.IncrementDisplaySize,
                                                "cardSlide3");
+                    anim.RegisterCallback(this.game.PlayZone.IncrementDisplaySize);
                     this.game.AnimationList.Add(anim);
 
                     // Play Card

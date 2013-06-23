@@ -26,8 +26,7 @@ namespace DBG48
                 // Left mouse click: Buy card
                 if (game.controller.isLeftMouseButtonClicked())
                 {
-                    this.game.MainPlayer.BuyCard(this.CardList[mouse_hover_index]);
-                    this.Restock(mouse_hover_index);
+                    this.PlayerBuyCard();
                 }
             }
         }
@@ -39,9 +38,62 @@ namespace DBG48
             base.Draw(spriteBatch);
         }
 
-        public void Restock(int index)
+        private void PlayerBuyCard()
         {
-            CardList[index] = this.game.RandomlyGenerateCard();
+            SoundEngine.Instance.PlaySoundEffect("cardPlace2");
+
+            // Animation
+            Rectangle originRectangle;
+            Rectangle goalRectangle;
+            Vector2 position;
+            SpriteAnimation anim;
+            int totalFrame = 40;
+
+            // Create card animation from hand zone to play zone
+            originRectangle = this.getCardDestinationRectangle(
+                                this.getHandCardPosition(mouse_hover_index), 1.07f);
+            position = new Vector2(this.game.DISCARD_POSITION.X + 3, this.game.DISCARD_POSITION.Y + 3);
+            goalRectangle = getCardDestinationRectangle(position, 1.07f);
+            anim = new SpriteAnimation(this.game,
+                                       GameInstance.squareTexture,
+                                       originRectangle,
+                                       goalRectangle,
+                                       totalFrame,
+                                       this.cardRotation,
+                                       this.cardRotation,
+                                       true,
+                                       Color.Black);
+            this.game.AnimationList.Add(anim);
+
+            originRectangle = this.getCardDestinationRectangle(
+                                this.getHandCardPosition(mouse_hover_index), 1.0f);
+            goalRectangle = getCardDestinationRectangle(position, 1.0f);
+            anim = new SpriteAnimation(this.game,
+                                       this.CardList[mouse_hover_index].Texture,
+                                       originRectangle,
+                                       goalRectangle,
+                                       totalFrame,
+                                       this.cardRotation,
+                                       this.cardRotation,
+                                       true,
+                                       Color.White,
+                                       "cardPlace1");
+            anim.RegisterCallback(MainPlayerBuyCard, this.CardList[mouse_hover_index]);
+            this.game.AnimationList.Add(anim);
+
+            // Main player gets card
+            //this.game.MainPlayer.BuyCard(this.CardList[mouse_hover_index]);
+
+            // Restock card
+            CardList[mouse_hover_index] = this.game.RandomlyGenerateCard();
+        }
+
+        private void MainPlayerBuyCard(object obj = null)
+        {
+            if (obj is Card)
+            {
+                this.game.MainPlayer.DiscardPile.Add(obj as Card);
+            }
         }
     }
 }

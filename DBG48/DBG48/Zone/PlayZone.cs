@@ -13,6 +13,35 @@ namespace DBG48
             this.zoneWidth = 320;
         }
 
+        public override void Update()
+        {
+            base.Update();
+
+            if (this.CardList.Count > 5)
+            {
+                if (game.controller.isLeftMouseButtonClicked())
+                {
+                    // Left Arrow
+                    Vector2 tempPosition = getHandCardPosition(0);
+                    Rectangle destinationRectangle = new Rectangle((int)tempPosition.X - 50, (int)tempPosition.Y, 24, 24);
+                    if(this.game.controller.isMouseInRegion(destinationRectangle))
+                    {
+                        if (this.cardDisplayStartIndex > 0)
+                            this.cardDisplayStartIndex--;
+                    }
+
+                    // Right Arrow
+                    destinationRectangle = new Rectangle((int)tempPosition.X + 245, (int)tempPosition.Y, 24, 24);
+                    if (this.game.controller.isMouseInRegion(destinationRectangle))
+                    {
+                        if (this.cardDisplayStartIndex + 5 < this.CardList.Count
+                            && this.cardDisplayStartIndex < this.maxDisplayStartIndex)
+                            this.cardDisplayStartIndex++;
+                    }
+                }
+            }
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (this.cardDisplaySize > this.CardList.Count)
@@ -51,25 +80,36 @@ namespace DBG48
             
             if (this.CardList.Count > 5)
             {
-                // Arrow
-                texture = GameInstance.uiTexture;
                 Vector2 tempPosition = getHandCardPosition(0);
-                destinationRectangle = new Rectangle((int)tempPosition.X - 50, (int)tempPosition.Y, 24, 24);
-                Vector2 uiOrigin = new Vector2(8, 8);
-                spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
 
-                texture = GameInstance.uiTexture;
-                destinationRectangle = new Rectangle((int)tempPosition.X + 245, (int)tempPosition.Y, 24, 24);
-                uiOrigin = new Vector2(8, 8);
-                spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+                // Arrow
+                if (this.cardDisplayStartIndex > 0)
+                {
+                    texture = GameInstance.uiTexture;
+                    destinationRectangle = new Rectangle((int)tempPosition.X - 50, (int)tempPosition.Y, 24, 24);
+                    Vector2 uiOrigin = new Vector2(8, 8);
+                    spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 6, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+                }
+
+                if (this.cardDisplayStartIndex + 5 < this.CardList.Count
+                    && this.cardDisplayStartIndex < this.maxDisplayStartIndex)
+                {
+                    texture = GameInstance.uiTexture;
+                    destinationRectangle = new Rectangle((int)tempPosition.X + 245, (int)tempPosition.Y, 24, 24);
+                    Vector2 uiOrigin = new Vector2(8, 8);
+                    spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, uiOrigin, SpriteEffects.None, 0.0f);
+                }
             }
         }
 
         // For callback
         public void IncrementDisplaySize(object obj = null)
         {
-            if(this.cardDisplaySize >= 5)
-                this.cardDisplayStartIndex++;
+            if (this.cardDisplaySize >= 5)
+            {
+                this.maxDisplayStartIndex++;
+                this.cardDisplayStartIndex = this.maxDisplayStartIndex;
+            }
             else
                 this.cardDisplaySize++;
         }
@@ -78,6 +118,7 @@ namespace DBG48
         {
             this.CardList.Clear();
             this.cardDisplayStartIndex = 0;
+            this.maxDisplayStartIndex = 0;
         }
     }
 }

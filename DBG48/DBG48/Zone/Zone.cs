@@ -18,8 +18,8 @@ namespace DBG48
         protected int zoneWidth = 480;
         protected int zoneHeight = 120;
         protected int cardDisplaySize = 5;
-        public int cardDisplayStartIndex = 0;
-
+        protected int cardDisplayStartIndex = 0;
+        protected int maxDisplayStartIndex = 0;
 
         protected float cardRotation = GameInstance.CARD_ROTATION;
         protected int cardDistance = 50;

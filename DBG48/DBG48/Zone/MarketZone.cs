@@ -40,7 +40,7 @@ namespace DBG48
 
         private void PlayerBuyCard()
         {
-            SoundEngine.Instance.PlaySoundEffect("cardPlace2");
+            SoundEngine.Instance.PlaySoundEffect("coin", 0.4f);
 
             // Animation
             Rectangle originRectangle;

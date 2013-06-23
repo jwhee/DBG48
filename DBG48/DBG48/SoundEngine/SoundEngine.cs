@@ -28,11 +28,11 @@ namespace DBG48
             SFX_Dictionary[key] = sfx;
         }
 
-        public void PlaySoundEffect(string key)
+        public void PlaySoundEffect(string key, float volume = 1.0f)
         {
             if(SFX_Dictionary.ContainsKey(key))
             {
-                SFX_Dictionary[key].Play();
+                SFX_Dictionary[key].Play(volume, 0.0f, 0.0f);
             }
         }
 

@@ -28,10 +28,10 @@ namespace DBG48
         // constant
         private Vector2 DECK_POSITION = new Vector2(60, 420);
         private Vector2 HANDZONE_POSITION = new Vector2(120, 360);
-        private Vector2 PLAYZONE_POSITION = new Vector2(120, 240);
+        private Vector2 PLAYZONE_POSITION = new Vector2(180, 240);
         private Vector2 MARKET_POSITION = new Vector2(170, 10);
         private Vector2 MARKET2_POSITION = new Vector2(185, 120);
-        public Vector2 DISCARD_POSITION = new Vector2(60, 300);
+        public Vector2 DISCARD_POSITION = new Vector2(120, 300);
         private string MARKET_NAME = "BACKSTAGE";
         public const float CARD_SCALE = 0.20f;
         public const int MAX_HAND_DISPLAY_SIZE = 8;

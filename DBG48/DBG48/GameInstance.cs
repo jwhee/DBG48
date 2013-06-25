@@ -32,6 +32,10 @@ namespace DBG48
         private Vector2 MARKET_POSITION = new Vector2(170, 10);
         private Vector2 MARKET2_POSITION = new Vector2(185, 120);
         public Vector2 DISCARD_POSITION = new Vector2(120, 300);
+        public string RESOURCE_POINT_TEXT_1 = "Recruit";
+        public string RESOURCE_POINT_TEXT_2 = "Point";
+        public string ATTACK_POINT_TEXT_1 = "Production";
+        public string ATTACK_POINT_TEXT_2 = "Value";
         private string MARKET_NAME = "BACKSTAGE";
         public const float CARD_SCALE = 0.20f;
         public const int MAX_HAND_DISPLAY_SIZE = 8;
@@ -431,12 +435,36 @@ namespace DBG48
             string discardPileText = "OFF";
             Vector2 discardPileTextPosition = new Vector2(DISCARD_POSITION.X - 80, DISCARD_POSITION.Y + 50);
             Vector2 offset = new Vector2(2, -1);
-            this.DrawText(spriteBatch, discardPileText, discardPileTextPosition, Color.Black, null, offset, (float)(0 - Math.PI / 2));
+            GameInstance.DrawText(spriteBatch, discardPileText, discardPileTextPosition, Color.Black, null, offset, (float)(0 - Math.PI / 2));
 
             discardPileText = "STAGE";
             discardPileTextPosition = new Vector2(discardPileTextPosition.X + 18, discardPileTextPosition.Y);
-            this.DrawText(spriteBatch, discardPileText, discardPileTextPosition, Color.Black, null, offset, (float)(0 - Math.PI / 2));
-            #endregion
+            GameInstance.DrawText(spriteBatch, discardPileText, discardPileTextPosition, Color.Black, null, offset, (float)(0 - Math.PI / 2));
+            #endregion // Draw Player Discard Pile
+
+            #region Player Status
+            // Background
+            destinationRectangle = new Rectangle(20, 100, 130, 115);
+            //destinationRectangle = new Rectangle(500, 350, 130, 115);
+            spriteBatch.Draw(GameInstance.squareTexture, destinationRectangle, new Color(10, 10, 10, 30));
+
+            // Resource Point
+            Vector2 resourcePointTextPosition = new Vector2(destinationRectangle.X + 10, destinationRectangle.Y + 10);
+            GameInstance.DrawText(spriteBatch, RESOURCE_POINT_TEXT_1, resourcePointTextPosition, Color.White, Color.Orange);
+            Vector2 resourcePointText2Position = new Vector2(resourcePointTextPosition.X, resourcePointTextPosition.Y + 18);
+            GameInstance.DrawText(spriteBatch, RESOURCE_POINT_TEXT_2, resourcePointText2Position, Color.White, Color.Orange);
+            Vector2 resourcePointValuePosition = new Vector2(resourcePointTextPosition.X + font.MeasureString(RESOURCE_POINT_TEXT_2).X + 30, resourcePointText2Position.Y);
+            GameInstance.DrawText(spriteBatch, this.MainPlayer.ResourcePoint.ToString(), resourcePointValuePosition, Color.White, Color.Orange);
+            
+            // Attack Point
+            Vector2 attackPointTextPosition = new Vector2(resourcePointTextPosition.X, resourcePointTextPosition.Y + 50);
+            GameInstance.DrawText(spriteBatch, ATTACK_POINT_TEXT_1, attackPointTextPosition, Color.LightYellow, Color.DarkMagenta);
+            Vector2 attackPointText2Position = new Vector2(attackPointTextPosition.X, attackPointTextPosition.Y + 18);
+            GameInstance.DrawText(spriteBatch, ATTACK_POINT_TEXT_2, attackPointText2Position, Color.LightYellow, Color.DarkMagenta);
+            Vector2 attackPointValuePosition = new Vector2(resourcePointTextPosition.X + font.MeasureString(ATTACK_POINT_TEXT_2).X + 25, attackPointText2Position.Y);
+            GameInstance.DrawText(spriteBatch, this.MainPlayer.AttackPoint.ToString(), attackPointValuePosition, Color.LightYellow, Color.DarkMagenta);
+            
+            #endregion // Player Status
 
             // Draw animation
             List<SpriteAnimation> newAnimationList = new List<SpriteAnimation>();
@@ -511,12 +539,12 @@ namespace DBG48
                 Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
                 stream.Close();
 
-                return new Card(cardTexture, cardInfo.Name, cardInfo.Text);
+                return new Card(cardTexture, cardInfo.Name, cardInfo.Text, 1, 1);
             }
             return new Card(squareTexture, "Empty Card", "");
         }
 
-        public void DrawText(
+        public static void DrawText(
             SpriteBatch spriteBatch, 
             string text,
             Vector2 textPosition,

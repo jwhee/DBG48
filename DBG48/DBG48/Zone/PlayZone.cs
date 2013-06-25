@@ -53,26 +53,8 @@ namespace DBG48
 
             string playAreaText = "MAINSTAGE AREA";
             Vector2 playAreaTextPosition = new Vector2(position.X + 30 , position.Y+ zoneHeight/3 - 15);
-            spriteBatch.DrawString(
-                GameInstance.font,
-                playAreaText,
-                playAreaTextPosition,
-                Color.DarkRed,
-                0.0f,
-                Vector2.Zero,
-                1.0f,
-                SpriteEffects.None,
-                0.0f);
-            spriteBatch.DrawString(
-                GameInstance.font,
-                playAreaText,
-                new Vector2(playAreaTextPosition.X + 2, playAreaTextPosition.Y + 1),
-                Color.White,
-                0.0f,
-                Vector2.Zero,
-                1.0f,
-                SpriteEffects.None,
-                0.0f);
+            Vector2 offset = new Vector2(2, 1);
+            GameInstance.DrawText(spriteBatch, playAreaText, playAreaTextPosition, Color.White, Color.DarkRed, offset);
 
             base.Draw(spriteBatch);
 

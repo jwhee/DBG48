@@ -26,7 +26,16 @@ namespace DBG48
                 // Left mouse click: Buy card
                 if (game.controller.isLeftMouseButtonClicked())
                 {
-                    this.PlayerBuyCard();
+                    Card card = this.CardList[mouse_hover_index];
+                    if (card.ResourcePointCost <= this.game.MainPlayer.ResourcePoint)
+                    {
+                        this.game.MainPlayer.SpendResourcePoint(card.ResourcePointCost);
+                        this.PlayerBuyCard();
+                    }
+                    else
+                    {
+                        SoundEngine.Instance.PlaySoundEffect("error");
+                    }
                 }
             }
         }
@@ -80,9 +89,6 @@ namespace DBG48
                                        "cardPlace1");
             anim.RegisterCallback(MainPlayerBuyCard, this.CardList[mouse_hover_index]);
             this.game.AnimationList.Add(anim);
-
-            // Main player gets card
-            //this.game.MainPlayer.BuyCard(this.CardList[mouse_hover_index]);
 
             // Restock card
             CardList[mouse_hover_index] = this.game.RandomlyGenerateCard();

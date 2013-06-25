@@ -17,12 +17,12 @@ namespace DBG48
         private GameInstance game;
         private OverlayState state = OverlayState.FLY_IN;
         private Card card;
-        private SpriteAnimation flyInAnimation;
-        private SpriteAnimation flyOutAnimation;
+        private CardAnimation flyInAnimation;
+        private CardAnimation flyOutAnimation;
         private int currentFrame;
+        private Vector2 goalCardPosition;
 
         // Format: Rectangle(center.X, center.Y, width, height)
-        private Rectangle cardRectangle;
         private Rectangle viewPort;
 
         ButtonUI playButton;
@@ -31,16 +31,32 @@ namespace DBG48
         public CardSelectedOverlay(
             GameInstance game,
             Card card,
-            Rectangle originRectangle,
-            Rectangle goalRectangle, 
-            float originRotation = 0.0f, 
-            float goalRotation = 0.0f)
+            Vector2 originCardPosition,
+            Vector2 goalCardPosition,
+            float originCardRotation = 0.0f, 
+            float goalCardRotation = 0.0f)
         {
             this.game = game;
             this.card = card;
-            this.flyInAnimation = new SpriteAnimation(game, card.Texture, originRectangle, goalRectangle, 10, originRotation, goalRotation, false);
-            this.flyOutAnimation = new SpriteAnimation(game, card.Texture, goalRectangle, originRectangle, 5, goalRotation, originRotation, true);
-            this.cardRectangle = goalRectangle;
+            this.flyInAnimation = new CardAnimation(card,
+                                                    originCardPosition,
+                                                    goalCardPosition,
+                                                    10,
+                                                    1.0f,
+                                                    5.0f,
+                                                    originCardRotation,
+                                                    goalCardRotation,
+                                                    false);
+            this.flyOutAnimation = new CardAnimation(card,
+                                                    goalCardPosition,
+                                                    originCardPosition,
+                                                    10,
+                                                    5.0f,
+                                                    1.0f,
+                                                    goalCardRotation,
+                                                    originCardRotation,
+                                                    true);
+            this.goalCardPosition = goalCardPosition;
             this.state = OverlayState.FLY_IN;
             this.currentFrame = 0;
             this.viewPort = new Rectangle(game.GraphicsDevice.PresentationParameters.Bounds.Width / 2, game.GraphicsDevice.PresentationParameters.Bounds.Height/2, game.GraphicsDevice.PresentationParameters.Bounds.Width, game.GraphicsDevice.PresentationParameters.Bounds.Height);
@@ -49,10 +65,6 @@ namespace DBG48
             //this.resourceButton = new ButtonUI(game, new Rectangle(400, 400, 205, 50), 3, "Resource");
         }
 
-        /// <summary>
-        /// Allows the game component to update itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Update()
         {
             if (currentFrame < 10)
@@ -84,11 +96,7 @@ namespace DBG48
                     
                     if (this.game.controller.isLeftMouseButtonClicked())
                     {
-                        if (this.game.controller.isMouseInRegion(this.cardRectangle))
-                        {
-                            // DO SOMETHING
-                        }
-                        else if(this.game.controller.isMouseInRegion(this.viewPort))
+                        if(this.game.controller.isMouseInRegion(this.viewPort))
                         {
                             this.currentFrame = 0;
                             this.state = OverlayState.FLY_OUT;
@@ -144,9 +152,7 @@ namespace DBG48
                     //playButton.Draw(spriteBatch);
 
                     // Card
-                    texture = card.Texture;
-                    origin = new Vector2(texture.Width / 2, texture.Height / 2);
-                    spriteBatch.Draw(texture, cardRectangle, null, Color.White, 0.0f, origin, SpriteEffects.None, 0.0f);
+                    card.Draw(spriteBatch, goalCardPosition, 5.0f);
 
                     // Text box
                     texture = GameInstance.squareTexture;

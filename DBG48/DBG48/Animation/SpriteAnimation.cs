@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DBG48
 {
-    public delegate void Callback(object obj = null);
-
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>

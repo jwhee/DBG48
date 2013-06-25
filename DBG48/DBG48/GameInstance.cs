@@ -69,7 +69,7 @@ namespace DBG48
         public MarketZone Market2Zone;
 
         public Player MainPlayer;
-        public List<SpriteAnimation> AnimationList;
+        public List<CardAnimation> AnimationList;
 
         public GameInstance()
         {
@@ -172,7 +172,7 @@ namespace DBG48
             PlayZone = new PlayZone(this, PLAYZONE_POSITION);
             
             // initialize animation list
-            AnimationList = new List<SpriteAnimation>();
+            AnimationList = new List<CardAnimation>();
 
             // initialize sound engine
             if (Directory.Exists(@"Content\SFX\"))
@@ -223,7 +223,7 @@ namespace DBG48
                 // Update mouse
                 controller.Update();
 
-                foreach (SpriteAnimation animation in AnimationList)
+                foreach (CardAnimation animation in AnimationList)
                 {
                     animation.Update();
                 }
@@ -467,8 +467,8 @@ namespace DBG48
             #endregion // Player Status
 
             // Draw animation
-            List<SpriteAnimation> newAnimationList = new List<SpriteAnimation>();
-            foreach (SpriteAnimation animation in AnimationList)
+            List<CardAnimation> newAnimationList = new List<CardAnimation>();
+            foreach (CardAnimation animation in AnimationList)
             {
                 animation.Draw(spriteBatch);
                 if (!animation.Finished())

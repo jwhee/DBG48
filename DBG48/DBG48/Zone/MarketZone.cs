@@ -51,42 +51,21 @@ namespace DBG48
         {
             SoundEngine.Instance.PlaySoundEffect("coin", 0.4f);
 
-            // Animation
-            Rectangle originRectangle;
-            Rectangle goalRectangle;
-            Vector2 position;
-            SpriteAnimation anim;
-            int totalFrame = 40;
-
             // Create card animation from hand zone to play zone
-            originRectangle = this.getCardDestinationRectangle(
-                                this.getHandCardPosition(mouse_hover_index), 1.07f);
-            position = new Vector2(this.game.DISCARD_POSITION.X + 3, this.game.DISCARD_POSITION.Y + 3);
-            goalRectangle = getCardDestinationRectangle(position, 1.07f);
-            anim = new SpriteAnimation(this.game,
-                                       GameInstance.squareTexture,
-                                       originRectangle,
-                                       goalRectangle,
-                                       totalFrame,
-                                       this.cardRotation,
-                                       this.cardRotation,
-                                       true,
-                                       Color.Black);
+            uint totalFrame = 40;
+            Vector2 position = new Vector2(this.game.DISCARD_POSITION.X + 3, this.game.DISCARD_POSITION.Y + 3);
+            CardAnimation anim = new CardAnimation(this.CardList[mouse_hover_index],
+                                     this.getHandCardPosition(mouse_hover_index),
+                                     position,
+                                     totalFrame,
+                                     1.0f,
+                                     1.0f,
+                                     this.cardRotation,
+                                     this.cardRotation,
+                                     true,
+                                     Color.Black,
+                                     "cardPlace1");
             this.game.AnimationList.Add(anim);
-
-            originRectangle = this.getCardDestinationRectangle(
-                                this.getHandCardPosition(mouse_hover_index), 1.0f);
-            goalRectangle = getCardDestinationRectangle(position, 1.0f);
-            anim = new SpriteAnimation(this.game,
-                                       this.CardList[mouse_hover_index].Texture,
-                                       originRectangle,
-                                       goalRectangle,
-                                       totalFrame,
-                                       this.cardRotation,
-                                       this.cardRotation,
-                                       true,
-                                       Color.White,
-                                       "cardPlace1");
             anim.RegisterCallback(MainPlayerBuyCard, this.CardList[mouse_hover_index]);
             this.game.AnimationList.Add(anim);
 

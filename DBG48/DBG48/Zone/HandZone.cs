@@ -26,42 +26,22 @@ namespace DBG48
                 // Left mouse click: Play card
                 if (game.controller.isLeftMouseButtonClicked())
                 {
-                    Rectangle originRectangle;
-                    Rectangle goalRectangle;
-                    SpriteAnimation anim;
-                    int totalFrame = 20;
+                    CardAnimation anim;
+                    uint totalFrame = 20;
 
                     // Create card animation from hand zone to play zone
                     int playZoneIndex = Math.Min(this.game.PlayZone.CardList.Count, 4);
-                    originRectangle = this.getCardDestinationRectangle(
-                                        this.getHandCardPosition(mouse_hover_index), 1.07f);
-                    goalRectangle = this.game.PlayZone.getCardDestinationRectangle(
-                                        this.game.PlayZone.getHandCardPosition(playZoneIndex), 1.07f);
-                    anim = new SpriteAnimation(this.game,
-                                               GameInstance.squareTexture,
-                                               originRectangle,
-                                               goalRectangle,
-                                               totalFrame,
-                                               GameInstance.CARD_ROTATION,
-                                               GameInstance.CARD_ROTATION,
-                                               true,
-                                               Color.Black);
-                    this.game.AnimationList.Add(anim);
-
-                    originRectangle = this.getCardDestinationRectangle(
-                                        this.getHandCardPosition(mouse_hover_index), 1.0f);
-                    goalRectangle = this.game.PlayZone.getCardDestinationRectangle(
-                                        this.game.PlayZone.getHandCardPosition(playZoneIndex), 1.0f);
-                    anim = new SpriteAnimation(this.game,
-                                               this.mainPlayer.Hand[mouse_hover_index].Texture,
-                                               originRectangle,
-                                               goalRectangle,
-                                               totalFrame,
-                                               GameInstance.CARD_ROTATION,
-                                               GameInstance.CARD_ROTATION,
-                                               true,
-                                               Color.White,
-                                               "cardSlide3");
+                    anim = new CardAnimation(this.mainPlayer.Hand[mouse_hover_index],
+                                             this.getHandCardPosition(mouse_hover_index),
+                                             this.game.PlayZone.getHandCardPosition(playZoneIndex),
+                                             totalFrame,
+                                             1.0f,
+                                             1.0f,
+                                             GameInstance.CARD_ROTATION,
+                                             GameInstance.CARD_ROTATION,
+                                             true,
+                                             Color.Black,
+                                             "cardSlide3");
                     anim.RegisterCallback(this.game.PlayZone.IncrementDisplaySize);
                     this.game.AnimationList.Add(anim);
 

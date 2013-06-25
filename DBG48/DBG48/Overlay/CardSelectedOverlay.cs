@@ -5,21 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DBG48
 {
-    public class CardSelectedOverlay
+    public class CardSelectedOverlay : Overlay
     {
-        private enum OverlayState
-        {
-            FLY_IN,
-            NORMAL,
-            FLY_OUT
-        }
-        
-        private GameInstance game;
-        private OverlayState state = OverlayState.FLY_IN;
         private Card card;
         private CardAnimation flyInAnimation;
         private CardAnimation flyOutAnimation;
-        private int currentFrame;
         private Vector2 goalCardPosition;
 
         // Format: Rectangle(center.X, center.Y, width, height)
@@ -35,8 +25,8 @@ namespace DBG48
             Vector2 goalCardPosition,
             float originCardRotation = 0.0f, 
             float goalCardRotation = 0.0f)
+            : base (game)
         {
-            this.game = game;
             this.card = card;
             this.flyInAnimation = new CardAnimation(card,
                                                     originCardPosition,
@@ -57,15 +47,13 @@ namespace DBG48
                                                     originCardRotation,
                                                     true);
             this.goalCardPosition = goalCardPosition;
-            this.state = OverlayState.FLY_IN;
-            this.currentFrame = 0;
             this.viewPort = new Rectangle(game.GraphicsDevice.PresentationParameters.Bounds.Width / 2, game.GraphicsDevice.PresentationParameters.Bounds.Height/2, game.GraphicsDevice.PresentationParameters.Bounds.Width, game.GraphicsDevice.PresentationParameters.Bounds.Height);
 
             this.playButton = new ButtonUI(game, new Rectangle(550, 420, 300, 100), 1, "Play!");
             //this.resourceButton = new ButtonUI(game, new Rectangle(400, 400, 205, 50), 3, "Resource");
         }
 
-        public void Update()
+        public override void Update()
         {
             if (currentFrame < 10)
                 currentFrame++;
@@ -115,7 +103,7 @@ namespace DBG48
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             // DEBUG
             //spriteBatch.Draw(Game1.squareTexture, cardRectangle, null, new Color(0, 50, 0, 0), 0.0f, new Vector2(Game1.squareTexture.Width / 2, Game1.squareTexture.Height / 2), SpriteEffects.None, 0.0f);

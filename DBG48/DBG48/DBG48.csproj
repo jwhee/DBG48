@@ -107,8 +107,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation\Animation.cs" />
     <Compile Include="Callback\Callback.cs" />
     <Compile Include="Card\CardInfoContainer.cs" />
+    <Compile Include="Overlay\Overlay.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="SoundEngine\SoundEngine.cs" />
     <Compile Include="UI\ButtonUI.cs" />

@@ -14,6 +14,7 @@ namespace DBG48
             this.CardList = this.game.MainPlayer.Hand;
             this.mainPlayer = this.game.MainPlayer;
             this.cardDisplaySize = GameInstance.MAX_HAND_DISPLAY_SIZE;
+            this.hoverFrameColor = Color.HotPink;
         }
 
         public override void Update()
@@ -93,11 +94,6 @@ namespace DBG48
                 cardOrigin = new Vector2(8, 8);
                 spriteBatch.Draw(texture, destinationRectangle, new Rectangle(16 * 2, 16 * 0, 16, 16), Color.Black, 0.0f, cardOrigin, SpriteEffects.None, 0.0f);
             }
-        }
-
-        protected override Color getHoverFrameColor()
-        {
-            return Color.HotPink;
         }
     }
 }

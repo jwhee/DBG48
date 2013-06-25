@@ -30,26 +30,27 @@ namespace DBG48
 
         public void Draw(
             SpriteBatch spriteBatch,
-            Rectangle frameRectangle,
-            Rectangle imageRectangle,
-            Color? frameColor = null,
-            float rotation = 0.0f)
+            Vector2 position,
+            float scale = 1.0f,
+            float rotation = 0.0f,
+            Color? frameColor = null)
         {
-            if (frameColor == null)
-            {
-                frameColor = Color.Black;
-            }
+            Rectangle frameRectangle = Card.GetDestinationRectangle(position, 1.07f * scale);
+            Rectangle imageRectangle = Card.GetDestinationRectangle(position, 1.0f * scale);
 
             // Draw frame
-            spriteBatch.Draw(
-                GameInstance.squareTexture, 
-                frameRectangle, 
-                null, 
-                frameColor.Value,
-                rotation,
-                new Vector2(GameInstance.squareTexture.Width / 2, GameInstance.squareTexture.Height / 2),
-                SpriteEffects.None,
-                0.0f);
+            if (frameColor != null)
+            {
+                spriteBatch.Draw(
+                    GameInstance.squareTexture,
+                    frameRectangle,
+                    null,
+                    frameColor.Value,
+                    rotation,
+                    new Vector2(GameInstance.squareTexture.Width / 2, GameInstance.squareTexture.Height / 2),
+                    SpriteEffects.None,
+                    0.0f);
+            }
 
             // Draw card image
             spriteBatch.Draw(
@@ -61,6 +62,16 @@ namespace DBG48
                 new Vector2(this.Texture.Width / 2, this.Texture.Height / 2),
                 SpriteEffects.None,
                 0.0f);
+        }
+
+        public static Rectangle GetDestinationRectangle(Vector2 position, float scale)
+        {
+            int width = (int)(GameInstance.CARD_WIDTH * GameInstance.CARD_SCALE * scale);
+            int height = (int)(GameInstance.CARD_HEIGHT * GameInstance.CARD_SCALE * scale);
+            return new Rectangle((int)(position.X),
+                                 (int)(position.Y),
+                                 width,
+                                 height);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace DBG48
         protected int maxCardDisplaySize = 5;
         protected int cardDisplayStartIndex = 0;
         protected int maxDisplayStartIndex = 0;
-
+        protected Color hoverFrameColor = Color.Black;
         protected float cardRotation = GameInstance.CARD_ROTATION;
         protected int cardDistance = 50;
         public Zone(GameInstance game, Vector2 position)
@@ -86,14 +86,9 @@ namespace DBG48
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture;
-            Rectangle destinationRectangle;
-            Vector2 cardOrigin;
-
             // Debug
-            texture = GameInstance.squareTexture;
-            destinationRectangle = new Rectangle((int)position.X, (int)position.Y, zoneWidth, zoneHeight);
-            //spriteBatch.Draw(texture, destinationRectangle, new Color(0, 255, 0, 50));
+            Rectangle destinationRectangle = new Rectangle((int)position.X, (int)position.Y, zoneWidth, zoneHeight);
+            //spriteBatch.Draw(GameInstance.squareTexture, destinationRectangle, new Color(0, 255, 0, 50));
 
             // Draw hand
             for (int i = 0; i < this.cardDisplaySize; i++)
@@ -102,14 +97,12 @@ namespace DBG48
 
                 if (mouse_hover_index != i && cardIndex < this.CardList.Count)
                 {
-                    Rectangle frameRectangle = getCardDestinationRectangle(getHandCardPosition(i), 1.07f);
-                    Rectangle imageRectangle = getCardDestinationRectangle(getHandCardPosition(i), 1.0f);
                     this.CardList[cardIndex].Draw(
                         spriteBatch,
-                        frameRectangle,
-                        imageRectangle,
-                        null,
-                        this.cardRotation);
+                        getHandCardPosition(i),
+                        1.0f,
+                        this.cardRotation,
+                        Color.Black);
                 }
             }
 
@@ -122,26 +115,14 @@ namespace DBG48
                     && mouse_hover_index < this.cardDisplaySize
                     && cardIndex < this.CardList.Count)
                 {
-                    Rectangle frameRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.3f);
-                    Rectangle imageRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.2f);
                     this.CardList[cardIndex].Draw(
                         spriteBatch,
-                        frameRectangle,
-                        imageRectangle,
-                        this.getHoverFrameColor(),
-                        this.cardRotation);
+                        getHandCardPosition(mouse_hover_index),
+                        1.2f,
+                        this.cardRotation,
+                        this.hoverFrameColor);
                 }
             }
-        }
-
-        //public void resetMouseHoverIndex()
-        //{
-        //    this.mouse_hover_index = -1;
-        //}
-
-        protected virtual Color getHoverFrameColor()
-        {
-            return Color.Black;
         }
     }
 }

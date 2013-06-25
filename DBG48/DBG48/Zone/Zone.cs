@@ -102,17 +102,14 @@ namespace DBG48
 
                 if (mouse_hover_index != i && cardIndex < this.CardList.Count)
                 {
-                    // Draw frame
-                    texture = GameInstance.squareTexture;
-                    destinationRectangle = getCardDestinationRectangle(getHandCardPosition(i), 1.07f);
-                    cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
-                    spriteBatch.Draw(texture, destinationRectangle, null, Color.Black, this.cardRotation, cardOrigin, SpriteEffects.None, 0.0f);
-
-                    // Draw other cards
-                    texture = this.CardList[cardIndex].Texture;
-                    destinationRectangle = getCardDestinationRectangle(getHandCardPosition(i), 1.0f);
-                    cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
-                    spriteBatch.Draw(texture, destinationRectangle, null, Color.White, this.cardRotation, cardOrigin, SpriteEffects.None, 0.0f);
+                    Rectangle frameRectangle = getCardDestinationRectangle(getHandCardPosition(i), 1.07f);
+                    Rectangle imageRectangle = getCardDestinationRectangle(getHandCardPosition(i), 1.0f);
+                    this.CardList[cardIndex].Draw(
+                        spriteBatch,
+                        frameRectangle,
+                        imageRectangle,
+                        null,
+                        this.cardRotation);
                 }
             }
 
@@ -125,17 +122,14 @@ namespace DBG48
                     && mouse_hover_index < this.cardDisplaySize
                     && cardIndex < this.CardList.Count)
                 {
-                    // Draw highlight
-                    texture = GameInstance.squareTexture;
-                    destinationRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.3f);
-                    cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
-                    spriteBatch.Draw(texture, destinationRectangle, null, this.getHoverFrameColor(), this.cardRotation, cardOrigin, SpriteEffects.None, 0.0f);
-
-                    // Draw hovered card
-                    texture = this.CardList[cardIndex].Texture;
-                    destinationRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.2f);
-                    cardOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
-                    spriteBatch.Draw(texture, destinationRectangle, null, Color.White, this.cardRotation, cardOrigin, SpriteEffects.None, 0.0f);
+                    Rectangle frameRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.3f);
+                    Rectangle imageRectangle = getCardDestinationRectangle(getHandCardPosition(mouse_hover_index), 1.2f);
+                    this.CardList[cardIndex].Draw(
+                        spriteBatch,
+                        frameRectangle,
+                        imageRectangle,
+                        this.getHoverFrameColor(),
+                        this.cardRotation);
                 }
             }
         }

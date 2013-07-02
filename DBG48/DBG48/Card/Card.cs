@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace DBG48
 {
@@ -10,22 +11,28 @@ namespace DBG48
     {
         public Texture2D Texture { get; private set; }
         public string Name { get; private set; }
-        public string Text { get; private set; }
-        public uint ResourcePointCost { get; private set; }
-        public uint AttackPointCost { get; private set; }
+        public uint Cost { get; private set; }
+
+        public uint ResourcePoint { get; private set; }
+        public uint AttackPoint { get; private set; }
+        public uint ActionPoint { get; private set; }
 
         public Card(
             Texture2D texture, 
             string Name, 
-            string Text, 
-            uint ResourcePointCost = 0,
-            uint AttackPointCost = 0)
+            uint Cost = 0,
+            uint ActionPoint = 0,
+            uint ResourcePoint = 0,
+            uint AttackPoint = 0
+            )
         {
             this.Texture = texture;
             this.Name = Name;
-            this.Text = Text;
-            this.ResourcePointCost = ResourcePointCost;
-            this.AttackPointCost = AttackPointCost;
+            this.Cost = Cost;
+            
+            this.ActionPoint = ActionPoint;
+            this.ResourcePoint = ResourcePoint;
+            this.AttackPoint = AttackPoint;
         }
 
         public void Draw(
@@ -64,7 +71,7 @@ namespace DBG48
                 0.0f);
         }
 
-        public static Rectangle GetDestinationRectangle(Vector2 position, float scale)
+        private static Rectangle GetDestinationRectangle(Vector2 position, float scale)
         {
             int width = (int)(GameInstance.CARD_WIDTH * GameInstance.CARD_SCALE * scale);
             int height = (int)(GameInstance.CARD_HEIGHT * GameInstance.CARD_SCALE * scale);

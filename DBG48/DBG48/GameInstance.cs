@@ -32,11 +32,13 @@ namespace DBG48
         private Vector2 MARKET_POSITION = new Vector2(170, 10);
         private Vector2 MARKET2_POSITION = new Vector2(185, 120);
         public Vector2 DISCARD_POSITION = new Vector2(120, 300);
-        public string RESOURCE_POINT_TEXT_1 = "Recruit";
-        public string RESOURCE_POINT_TEXT_2 = "Point";
-        public string ATTACK_POINT_TEXT_1 = "Production";
-        public string ATTACK_POINT_TEXT_2 = "Value";
-        private string MARKET_NAME = "BACKSTAGE";
+        public const string RESOURCE_POINT_TEXT_1 = "Recruit";
+        public const string RESOURCE_POINT_TEXT_2 = "Point";
+        public const string ATTACK_POINT_TEXT_1 = "Production";
+        public const string ATTACK_POINT_TEXT_2 = "Point";
+        public const string ACTION_POINT_TEXT_1 = "Encore";
+        public const string ACTION_POINT_TEXT_2 = "Point";
+        private const string MARKET_NAME = "BACKSTAGE";
         public const float CARD_SCALE = 0.20f;
         public const int MAX_HAND_DISPLAY_SIZE = 8;
         private const int START_HAND_SIZE = 5;
@@ -56,7 +58,7 @@ namespace DBG48
         public static SpriteFont font;
 
         public static Random randGen;
-        float elapsedTime = 0.0f;
+        private float elapsedTime = 0.0f;
 
         public Controller controller;
         public GameState currentGameState = GameState.PREGAME;
@@ -444,12 +446,20 @@ namespace DBG48
 
             #region Player Status
             // Background
-            destinationRectangle = new Rectangle(20, 100, 130, 115);
+            destinationRectangle = new Rectangle(20, 50, 130, 165);
             //destinationRectangle = new Rectangle(500, 350, 130, 115);
             spriteBatch.Draw(GameInstance.squareTexture, destinationRectangle, new Color(10, 10, 10, 30));
 
             // Resource Point
-            Vector2 resourcePointTextPosition = new Vector2(destinationRectangle.X + 10, destinationRectangle.Y + 10);
+            Vector2 actionPointTextPosition = new Vector2(destinationRectangle.X + 10, destinationRectangle.Y + 10);
+            GameInstance.DrawText(spriteBatch, ACTION_POINT_TEXT_1, actionPointTextPosition, Color.White, Color.Green);
+            Vector2 actionPointText2Position = new Vector2(actionPointTextPosition.X, actionPointTextPosition.Y + 18);
+            GameInstance.DrawText(spriteBatch, ACTION_POINT_TEXT_2, actionPointText2Position, Color.White, Color.Green);
+            Vector2 actionPointValuePosition = new Vector2(actionPointTextPosition.X + font.MeasureString(RESOURCE_POINT_TEXT_2).X + 30, actionPointText2Position.Y);
+            GameInstance.DrawText(spriteBatch, this.MainPlayer.ActionPoint.ToString(), actionPointValuePosition, Color.White, Color.Green);
+
+            // Resource Point
+            Vector2 resourcePointTextPosition = new Vector2(actionPointTextPosition.X, actionPointTextPosition.Y + 50);
             GameInstance.DrawText(spriteBatch, RESOURCE_POINT_TEXT_1, resourcePointTextPosition, Color.White, Color.Orange);
             Vector2 resourcePointText2Position = new Vector2(resourcePointTextPosition.X, resourcePointTextPosition.Y + 18);
             GameInstance.DrawText(spriteBatch, RESOURCE_POINT_TEXT_2, resourcePointText2Position, Color.White, Color.Orange);
@@ -461,7 +471,7 @@ namespace DBG48
             GameInstance.DrawText(spriteBatch, ATTACK_POINT_TEXT_1, attackPointTextPosition, Color.LightYellow, Color.DarkMagenta);
             Vector2 attackPointText2Position = new Vector2(attackPointTextPosition.X, attackPointTextPosition.Y + 18);
             GameInstance.DrawText(spriteBatch, ATTACK_POINT_TEXT_2, attackPointText2Position, Color.LightYellow, Color.DarkMagenta);
-            Vector2 attackPointValuePosition = new Vector2(resourcePointTextPosition.X + font.MeasureString(ATTACK_POINT_TEXT_2).X + 25, attackPointText2Position.Y);
+            Vector2 attackPointValuePosition = new Vector2(resourcePointTextPosition.X + font.MeasureString(ATTACK_POINT_TEXT_2).X + 30, attackPointText2Position.Y);
             GameInstance.DrawText(spriteBatch, this.MainPlayer.AttackPoint.ToString(), attackPointValuePosition, Color.LightYellow, Color.DarkMagenta);
             
             #endregion // Player Status
@@ -516,7 +526,11 @@ namespace DBG48
                     string[] filePaths = Directory.GetFiles(directory, "*.jpg");
                     foreach (string path in filePaths)
                     {
-                        CardInfoList.Add(new CardInfoContainer(path, name, ""));
+                        uint actionPoint = (uint)(randGen.Next(10) < 4 ? 1 : 0);
+                        uint resourcePoint = (uint)randGen.Next(3) + 1;
+                        uint attackPoint = (uint)randGen.Next(2) + 1;
+                        uint cost = actionPoint*2 + resourcePoint + attackPoint;
+                        CardInfoList.Add(new CardInfoContainer(path, name, cost, actionPoint, resourcePoint, attackPoint));
                     }
                 }
             }
@@ -539,9 +553,15 @@ namespace DBG48
                 Texture2D cardTexture = Texture2D.FromStream(GraphicsDevice, stream);
                 stream.Close();
 
-                return new Card(cardTexture, cardInfo.Name, cardInfo.Text, 1, 1);
+                return new Card(
+                    cardTexture, 
+                    cardInfo.Name, 
+                    cardInfo.Cost,
+                    cardInfo.ActionPoint,
+                    cardInfo.ResourcePoint,
+                    cardInfo.AttackPoint);
             }
-            return new Card(squareTexture, "Empty Card", "");
+            return new Card(squareTexture, "Empty Card");
         }
 
         public static void DrawText(

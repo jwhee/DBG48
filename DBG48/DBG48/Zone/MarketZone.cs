@@ -27,9 +27,9 @@ namespace DBG48
                 if (game.controller.isLeftMouseButtonClicked())
                 {
                     Card card = this.CardList[mouse_hover_index];
-                    if (card.ResourcePointCost <= this.game.MainPlayer.ResourcePoint)
+                    if (card.Cost <= this.game.MainPlayer.ResourcePoint)
                     {
-                        this.game.MainPlayer.SpendResourcePoint(card.ResourcePointCost);
+                        this.game.MainPlayer.SpendResourcePoint(card.Cost);
                         this.PlayerBuyCard();
                     }
                     else

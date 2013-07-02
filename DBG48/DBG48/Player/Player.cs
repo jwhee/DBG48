@@ -12,6 +12,7 @@ namespace DBG48
         public List<Card> DiscardPile { get; private set; }
         public uint ResourcePoint { get; private set; }
         public uint AttackPoint { get; private set; }
+        public uint ActionPoint { get; private set; }
 
         private GameInstance game;
 
@@ -22,8 +23,7 @@ namespace DBG48
             this.Deck = new Queue<Card>();
             this.DiscardPile = new List<Card>();
 
-            // Debug
-            this.ResourcePoint = 99;
+            this.ResetPoint();
         }
 
         public void InitializeDeck(Queue<Card> deck)
@@ -67,8 +67,15 @@ namespace DBG48
 
         public void PlayCard(Card card)
         {
+            this.ActionPoint--;
+
             this.Hand.Remove(card);
             this.game.PlayZone.CardList.Add(card);
+
+            // Resolve
+            this.ActionPoint += card.ActionPoint;
+            this.ResourcePoint += card.ResourcePoint;
+            this.AttackPoint += card.AttackPoint;
         }
 
         public void EndTurn()
@@ -87,8 +94,8 @@ namespace DBG48
             // Reset play pile and hand
             this.game.PlayZone.Reset();
             this.Hand.Clear();
-            this.ResourcePoint = 0;
-            this.AttackPoint = 0;
+
+            this.ResetPoint();
 
             // End turn
             this.game.currentGameState = GameState.PREGAME;
@@ -102,6 +109,13 @@ namespace DBG48
         public void SpendAttackPoint(uint cost)
         {
             this.AttackPoint -= cost;
+        }
+
+        private void ResetPoint()
+        {
+            this.ResourcePoint = 0;
+            this.AttackPoint = 0;
+            this.ActionPoint = 1;
         }
     }
 }

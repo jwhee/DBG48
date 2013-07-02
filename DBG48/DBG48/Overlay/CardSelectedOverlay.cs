@@ -151,13 +151,34 @@ namespace DBG48
                         Color.LightYellow, 0.0f, origin, SpriteEffects.None, 0.0f);
 
                     // Draw text
-                    string text = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(card.Name));
-                    origin.X = 0; //Game1.font.MeasureString(text).X/2;
-                    origin.Y = 0; //Game1.font.MeasureString(text).Y/2;
-                    spriteBatch.DrawString(GameInstance.font, text, new Vector2(420, 50), Color.Black, 0.0f, origin, 1.0f, SpriteEffects.None, 0.0f);
+                    string name = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(card.Name));
+                    GameInstance.DrawText(spriteBatch, name, new Vector2(420, 50), Color.Black);
 
-                    text = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(card.Text));
-                    spriteBatch.DrawString(GameInstance.font, text, new Vector2(420, 100), Color.Black, 0.0f, origin, 1.0f, SpriteEffects.None, 0.0f);
+                    string costText = "Cost: " + card.Cost;
+                    GameInstance.DrawText(spriteBatch, costText, new Vector2(650, 50), Color.Black);
+                    
+                    Vector2 position = new Vector2(420, 100);
+
+                    if (card.ActionPoint > 0)
+                    {
+                        string actionPointText = "+" + card.ActionPoint + " " + GameInstance.ACTION_POINT_TEXT_1;
+                        GameInstance.DrawText(spriteBatch, actionPointText, position, Color.Green);
+                        position.Y += 20;
+                    }
+
+                    if (card.ResourcePoint > 0)
+                    {
+                        string resourcePointText = "+" + card.ResourcePoint + " " + GameInstance.RESOURCE_POINT_TEXT_1;
+                        GameInstance.DrawText(spriteBatch, resourcePointText, position, Color.Orange);
+                        position.Y += 20;
+                    }
+
+                    if (card.AttackPoint > 0)
+                    {
+                        string attackPointText = "+" + card.AttackPoint + " " + GameInstance.ATTACK_POINT_TEXT_1;
+                        GameInstance.DrawText(spriteBatch, attackPointText, position, Color.DarkMagenta);
+                    }
+
                     break;
             }
         }

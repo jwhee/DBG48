@@ -110,6 +110,7 @@
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Callback\Callback.cs" />
     <Compile Include="Card\CardInfoContainer.cs" />
+    <Compile Include="CardEffect\CardEffect.cs" />
     <Compile Include="Overlay\Overlay.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="SoundEngine\SoundEngine.cs" />

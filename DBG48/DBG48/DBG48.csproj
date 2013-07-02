@@ -117,6 +117,7 @@
     <Compile Include="Card\Card.cs" />
     <Compile Include="Overlay\CardSelectedOverlay.cs" />
     <Compile Include="Controller\Controller.cs" />
+    <Compile Include="Zone\NewZone.cs" />
     <Compile Include="Zone\MarketZone.cs" />
     <Compile Include="Zone\PlayZone.cs" />
     <Compile Include="Zone\HandZone.cs" />

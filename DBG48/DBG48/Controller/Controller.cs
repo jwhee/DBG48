@@ -15,6 +15,11 @@ namespace DBG48
             this.game = game;
         }
 
+        public Vector2 MousePosition()
+        {
+            return new Vector2(ms.X, ms.Y);
+        }
+
         /// <summary>
         /// Allows the game component to update itself.
         /// </summary>

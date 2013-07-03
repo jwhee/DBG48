@@ -113,14 +113,68 @@ namespace DBG48
                     && mouse_hover_index < this.cardDisplaySize
                     && cardIndex < this.CardList.Count)
                 {
-                    this.CardList[cardIndex].Draw(
+                    Card card = this.CardList[cardIndex];
+                    card.Draw(
                         spriteBatch,
                         getHandCardPosition(mouse_hover_index),
                         1.2f,
                         this.cardRotation,
                         this.hoverFrameColor);
+
+                    this.DrawInfoBox(spriteBatch, card);
                 }
             }
+        }
+
+        private void DrawInfoBox(SpriteBatch spriteBatch, Card card)
+        {
+            // Draw box
+            Vector2 boxPos = this.getHandCardPosition(mouse_hover_index);
+            spriteBatch.Draw(
+                GameInstance.squareTexture,
+                new Rectangle((int)boxPos.X - 75, (int)boxPos.Y, 50, 50),
+                null,
+                Color.OrangeRed);
+
+            spriteBatch.Draw(
+                GameInstance.squareTexture,
+                new Rectangle((int)boxPos.X - 72, (int)boxPos.Y + 3, 44, 44),
+                null,
+                Color.LightGoldenrodYellow);
+
+            // Draw Stats
+            Vector2 textPos = new Vector2(boxPos.X - 72, boxPos.Y + 2);
+            GameInstance.DrawText(
+                spriteBatch,
+                card.ActionPoint.ToString(),
+                textPos,
+                Color.Green,
+                null,
+                null,
+                0.0f,
+                0.7f);
+
+            textPos.Y += 13;
+            GameInstance.DrawText(
+                spriteBatch,
+                card.ResourcePoint.ToString(),
+                textPos,
+                Color.Orange,
+                null,
+                null,
+                0.0f,
+                0.7f);
+
+            textPos.Y += 13;
+            GameInstance.DrawText(
+                spriteBatch,
+                card.AttackPoint.ToString(),
+                textPos,
+                Color.DarkMagenta,
+                null,
+                null,
+                0.0f,
+                0.7f);
         }
     }
 }
